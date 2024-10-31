@@ -11,7 +11,6 @@ import tempfile
 from typing import Sequence
 from collections import OrderedDict
 import rattle
-
 # This might not be true, but I have a habit of running the wrong python version and this is to save me frustration
 assert (sys.version_info.major >= 3 and sys.version_info.minor >= 6)
 
@@ -21,6 +20,7 @@ logger = logging.getLogger(__name__)
 all_trace_paths = {}
 # 定义全局变量来保存每个地址变量的树
 all_trees = {}
+
 def save_trace_to_global(variable, trace):
     """保存回溯路径到全局变量"""
     global all_trace_paths
@@ -254,6 +254,8 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
 
     if args.input:
         args.input.close()
+
+
 
 
 def backward_analysis(variable, all_instructions_by_variable, visited=None):
