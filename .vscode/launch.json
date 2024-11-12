@@ -3,11 +3,15 @@
     "configurations": [
         {
             "name": "Python 调试程序: 当前文件",
-            "type": "python",  // 如果你是用 Python 调试，可以修改为 "python"
+            "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/rattle-cli.py",  // 确保是rattle-cli.py的路径
-            "args": ["--input", "bytecode.txt"],  // 传递命令行参数
-            "console": "integratedTerminal"
+            "program": "${workspaceFolder}/rattle-cli.py",
+            "args": ["--input", "bytecode.txt"],
+            "console": "internalConsole",
+            "justMyCode": false,
+            "env": {
+                "PYTHONBREAKPOINT": "pdb.set_trace"
+            }
         }
     ]
 }
