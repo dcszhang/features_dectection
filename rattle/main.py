@@ -224,7 +224,7 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
 
 
 
-    # 对 SSA 中每个函数生成 CFG 和 PDG
+    # 对 SSA 中每个函数生成PDG
     for function in sorted(ssa.functions, key=lambda f: f.offset):
         cfg = rattle.ControlFlowGraph(function)
         pdg = rattle.ProgramDependenceGraph(function)
@@ -264,20 +264,28 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
         out_file_pdf = 'output/sdg.pdf'
         subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
         print(f'[+] Wrote SDG to {out_file_pdf}')
+        # 使用 CallBacktracking 对 SDG 中的函数进行回溯
+        call_backtracking = rattle.CallBacktracking(sdg)
 
-        # 创建并执行 backward slicing
-        slicer = rattle.BackwardSliceForCalls(sdg)
-        slicer.perform_backward_slicing_for_calls()
+        # 获取回溯结果的 DOT 内容并保存为独立的 DOT 文件和 PDF 文件
+        dot_content = call_backtracking.dot()
+        dot_sections = dot_content.split('digraph ')
+        
+        for section in dot_sections:
+            if section.strip():  # 确保不是空字符串
+                func_name_end = section.find(' {')
+                func_name = section[:func_name_end].strip() if func_name_end != -1 else 'unknown'
+                dot_content = 'digraph ' + section
 
-        # 将 backward slicing 结果写入 .dot 文件并转换为 PDF
-        slice_dot_path = 'output/slices.dot'
-        with open(slice_dot_path, "w") as f:
-            f.write(slicer.to_dot())
+                with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
+                    t.write(dot_content)
+                    t.flush()
+                    dot_path = t.name
 
-        slice_pdf_path = 'output/slices.pdf'
-        subprocess.call(['dot', '-Tpdf', '-o', slice_pdf_path, slice_dot_path])
-        print(f'[+] Wrote backward slicing for CALLs to {slice_pdf_path}')
-
+                # 生成每个 CALL 路径的 PDF 文件
+                out_file_pdf = f'output/{func_name}_call_backtrack.pdf'
+                subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
+                print(f'[+] Wrote backtrack paths to {out_file_pdf}')
     generate_sdg(sorted(ssa.functions, key=lambda f: f.offset))
     if args.stdout_to:
         sys.stdout = orig_stdout

@@ -317,76 +317,114 @@ class SystemDependenceGraph:
 
 
 
-class BackwardSliceForCalls:
+class CallBacktracking:
     def __init__(self, sdg: SystemDependenceGraph):
         self.sdg = sdg
-        self.slices = {}  # 存储每个 CALL 指令的切片结果
+        self.backtrack_results = self._perform_backtracking()
 
-    def perform_backward_slicing_for_calls(self):
-        # 遍历每个 PDG，找到带有 CALL 指令的基本块
+    def _perform_backtracking(self):
+        backtrack_results = {}
         for func, pdg in self.sdg.function_pdgs.items():
-            for block in func:
-                for insn in block:
-                    if insn.insn.name in ('CALL', 'CALLCODE', 'DELEGATECALL'):
-                        # 对每个 CALL 指令执行 backward slicing
-                        slice_result = self._perform_slice(pdg, f'block_{block.offset:#x}')
-                        # 将结果存储
-                        self.slices[f'{func.desc()}_CALL_at_{insn.offset:#x}'] = slice_result
+            backtrack_paths = self._backtrack_calls_in_function(pdg)
+            backtrack_results[func] = backtrack_paths
+        return backtrack_results
 
-    def _perform_slice(self, pdg, start_node):
-        # 初始化切片结果
-        slice_result = set()
-        self._slice_recursive(start_node, pdg, slice_result)
-        return slice_result
+    def _backtrack_calls_in_function(self, pdg: ProgramDependenceGraph):
+        backtrack_paths = []
+        for block in pdg.function:
+            for insn in block:
+                if insn.insn.name in ('CALL', 'CALLCODE', 'DELEGATECALL'):
+                    visited = set()
+                    path = []
+                    self._backtrack(block, pdg, visited, path)
+                    backtrack_paths.append(path)
+        return backtrack_paths
 
-    def _slice_recursive(self, node, pdg, slice_result):
-        if node in slice_result:
+    def _backtrack(self, block, pdg, visited, path):
+        if block in visited:
             return
+        visited.add(block)
+        path.append(block)
+        preds = [pred for pred, succ in pdg.control_edges + pdg.data_edges if succ == block]
+        for pred in preds:
+            self._backtrack(pred, pdg, visited, path)
 
-        # 添加节点到切片结果
-        slice_result.add(node)
+    def get_backtrack_results(self):
+        return self.backtrack_results
 
-        # 追踪控制和数据依赖的上游节点
-        for edge in pdg.control_edges + pdg.data_edges:
-            if edge[1] == node:
-                self._slice_recursive(edge[0], pdg, slice_result)
+class CallBacktracking:
+    def __init__(self, sdg: SystemDependenceGraph):
+        self.sdg = sdg
+        self.backtrack_results = self._perform_backtracking()
 
-    def to_dot(self):
-        # 输出每个 CALL 指令的切片到单独的子图
-        rv = 'digraph Slices {\n'
-        rv += 'graph [fontname = "consolas"];\n'
-        rv += 'node [fontname = "consolas"];\n'
-        rv += 'edge [fontname = "consolas"];\n'
+    def _perform_backtracking(self):
+        backtrack_results = {}
+        for func, pdg in self.sdg.function_pdgs.items():
+            backtrack_paths = self._backtrack_calls_in_function(pdg)
+            backtrack_results[func] = backtrack_paths
+        return backtrack_results
 
-        # 每个 CALL 的切片结果作为独立子图输出
-        for call, slice_nodes in self.slices.items():
-            # 替换 `call` 中的非法字符
-            sanitized_call = call.replace("(", "_").replace(")", "_")
-            
-            rv += f'subgraph cluster_{sanitized_call} {{\n'
-            rv += f'label="{call}";\n'
-            for node in slice_nodes:
-                rv += f'{node} [style=filled, fillcolor=lightblue];\n'
+    def _backtrack_calls_in_function(self, pdg: ProgramDependenceGraph):
+        backtrack_paths = []
+        for block in pdg.function:
+            for insn in block:
+                if insn.insn.name in ('CALL', 'CALLCODE', 'DELEGATECALL'):
+                    visited = set()
+                    path = []
+                    self._backtrack(block, pdg, visited, path, exclude_calls=True)
+                    backtrack_paths.append(path)
+        return backtrack_paths
 
-            # 添加不同类型的依赖边，使用不同的颜色
-            for func, pdg in self.sdg.function_pdgs.items():
-                # 控制依赖（红色）
-                for edge in pdg.control_edges:
-                    if edge[0] in slice_nodes and edge[1] in slice_nodes:
-                        rv += f'{edge[0]} -> {edge[1]} [color="red", label="control"];\n'
-                
-                # 数据依赖（蓝色）
-                for edge in pdg.data_edges:
-                    if edge[0] in slice_nodes and edge[1] in slice_nodes:
-                        rv += f'{edge[0]} -> {edge[1]} [color="blue", label="data"];\n'
-                
-                # 如果有参数依赖边，可以加上其他样式（如橙色）
-                if hasattr(pdg, 'parameter_edges'):
-                    for edge in pdg.parameter_edges:
-                        if edge[0] in slice_nodes and edge[1] in slice_nodes:
-                            rv += f'{edge[0]} -> {edge[1]} [color="orange", label="param"];\n'
+    def _backtrack(self, block, pdg, visited, path, exclude_calls=False):
+        if block in visited:
+            return
+        visited.add(block)
+        path.append(block)
+        if exclude_calls:
+            # 如果当前块中包含 CALL 指令，则跳过它
+            for insn in block:
+                if insn.insn.name in ('CALL', 'CALLCODE', 'DELEGATECALL') and block != path[0]:
+                    return
+        preds = [pred for pred, succ in pdg.control_edges + pdg.data_edges if succ == block]
+        for pred in preds:
+            self._backtrack(pred, pdg, visited, path, exclude_calls)
 
-            rv += '}\n'
+    def get_backtrack_results(self):
+        return self.backtrack_results
 
-        rv += '}\n'
+    def dot(self):
+        rv = ''
+        for func, paths in self.backtrack_results.items():
+            pdg = self.sdg.function_pdgs[func]  # 获取与函数关联的 PDG 对象
+            for idx, path in enumerate(paths):
+                func_name = func.desc().replace('<', '\<').replace('>', '\>')
+                rv += f'digraph "{func_name}_CallBacktrack_{idx}" {{'
+                rv += 'graph [fontname = "consolas"];'
+                rv += 'node [fontname = "consolas"];'
+                rv += 'edge [fontname = "consolas"];'
+
+                if path:
+                    start_block = path[0]
+                    rv += f'block_{start_block.offset:#x} [shape="box", color="yellow"];'
+
+                for i in range(len(path) - 1):
+                    block = path[i]
+                    next_block = path[i + 1]
+                    rv += f'block_{block.offset:#x} -> block_{next_block.offset:#x} [label="backtrack", color="red"];'
+
+                for block in path:
+                    block_body = '\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
+                    block_body = block_body.replace('<', '\<').replace('>', '\>')
+                    rv += f'block_{block.offset:#x} [label="{block_body}\l", shape="record"] ;'
+
+                # 继承控制依赖边和数据依赖边
+                control_edges = [edge for edge in pdg.control_edges if edge[0] in path and edge[1] in path]
+                data_edges = [edge for edge in pdg.data_edges if edge[0] in path and edge[1] in path]
+
+                for edge in control_edges:
+                    rv += f'block_{edge[0].offset:#x} -> block_{edge[1].offset:#x} [label="control", color="blue"];'
+                for edge in data_edges:
+                    rv += f'block_{edge[0].offset:#x} -> block_{edge[1].offset:#x} [label="data", color="green"];'
+
+                rv += '}'
         return rv
