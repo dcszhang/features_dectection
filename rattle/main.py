@@ -228,6 +228,22 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
     for function in sorted(ssa.functions, key=lambda f: f.offset):
         cfg = rattle.ControlFlowGraph(function)
         pdg = rattle.ProgramDependenceGraph(function)
+        # 写入 PDG 的 dot 文件
+        with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
+            t.write(pdg.dot())
+            t.flush()
+            dot_path = t.name
+
+        try:
+            os.makedirs('output', exist_ok=True)
+        except:
+            pass
+
+        # 生成 SDG 的 PDF 文件
+        out_file_pdf = f'output/pdg_{function.offset:#x}.pdf'
+        subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
+        print(f'[+] Wrote PDG to {out_file_pdf}')
+
 
     def generate_sdg(ssa_functions):
         # 创建 SystemDependenceGraph 实例

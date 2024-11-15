@@ -97,34 +97,62 @@ class DefUseGraph(object):
 
         return rv
 
-
 class ControlFlowGraph:
     def __init__(self, function: SSAFunction) -> None:
         self.function = function
+        self.edges = self.get_edges()
+        self.block_dict = {block.offset: block for block in function}  # Create a dictionary for efficient block lookup
 
     def get_edges(self):
         edges = []
-        # 直接遍历 self.function 中的每个 block
-        for block in self.function:  # self.function 是一个 SSAFunction 实例，支持直接迭代
-            block_id = f'block_{block.offset:#x}'
-            
-            # 获取 fallthrough 边
+        for block in self.function:
+            # Use block references directly instead of creating string IDs
             if block.fallthrough_edge:
-                target_block_id = f'block_{block.fallthrough_edge.offset:#x}'
-                edges.append((block_id, target_block_id))
+                edges.append((block, block.fallthrough_edge))
 
-            # 获取跳转边
             for edge in block.jump_edges:
-                target_block_id = f'block_{edge.offset:#x}'
-                edges.append((block_id, target_block_id))
+                edges.append((block, edge))
 
         return edges
 
+    def get_dominators(self):
+        dominators = {block: set(self.function) for block in self.function}
+        start_block = next(iter(self.function))
+        dominators[start_block] = {start_block}
+        changed = True
+
+        while changed:
+            changed = False
+            for block in self.function:
+                if block == start_block:
+                    continue
+                preds = [pred for pred, succ in self.edges if succ == block]
+                new_doms = set(self.function) if not preds else set.intersection(*[dominators[pred] for pred in preds])
+                new_doms.add(block)
+                if new_doms != dominators[block]:
+                    dominators[block] = new_doms
+                    changed = True
+
+        return dominators
+
+    def get_immediate_dominators(self):
+        dominators = self.get_dominators()
+        idoms = {}
+        for block in self.function:
+            doms = dominators[block] - {block}
+            idom = None
+            for dom in doms:
+                if all(other_dom == dom or other_dom not in dominators[block] for other_dom in doms):
+                    idom = dom
+                    break
+            idoms[block] = idom if idom is not None else next(iter(dominators[block]))  # Ensure every block has an immediate dominator
+        return idoms
+
     def dot(self) -> str:
-        rv = 'digraph G {\n'
-        rv += 'graph [fontname = "consolas"];\n'
-        rv += 'node [fontname = "consolas"];\n'
-        rv += 'edge [fontname = "consolas"];\n'
+        rv = 'digraph G {'
+        rv += 'graph [fontname = "consolas"];'
+        rv += 'node [fontname = "consolas"];'
+        rv += 'edge [fontname = "consolas"];'
 
         name = self.function.desc()
         hash = f'Hash: {self.function.hash:#x}'
@@ -133,114 +161,85 @@ class ControlFlowGraph:
         storage = f'Storage: {self.function.storage}'
 
         function_desc = [name, hash, offset, arguments, storage]
-        rv += f'ff [label="{{' + '\\l'.join(function_desc) + '\\l}}", shape="record" ];\n'
+        rv += f'ff [label="{{' + '\l'.join(function_desc) + '\l}}", shape="record" ];'
 
         edges = []
 
-        # 遍历 self.function 中的每个 block
         for block in self.function:
-            block_id = f'block_{block.offset:#x}'
-            block_body = '\\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
-            block_body = block_body.replace('<', '\\<').replace('>', '\\>')
-            block_dot = f'{block_id} [label="{block_body}\\l", shape="record"];'
+            block_body = '\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
+            block_body = block_body.replace('<', '\<').replace('>', '\>')
+            rv += f'block_{block.offset:#x} [label="{block_body}\l", shape="record"] ;'
 
-            fallthrough_label = ''
-            jump_label = ''
-            if len(block.jump_edges) > 0 and block.fallthrough_edge:
-                fallthrough_label = ' [label=" f", color="red"]'
-                jump_label = ' [label=" t", color="darkgreen"]'
+        for block, target_block in self.edges:
+            rv += f'block_{block.offset:#x} -> block_{target_block.offset:#x};'
 
-            if block.fallthrough_edge:
-                target_block_id = f'block_{block.fallthrough_edge.offset:#x}'
-                edges.append(f'{block_id} -> {target_block_id}{fallthrough_label};')
-
-            for edge in block.jump_edges:
-                target_block_id = f'block_{edge.offset:#x}'
-                edges.append(f'{block_id} -> {target_block_id}{jump_label};')
-
-            rv += block_dot + '\n'
-
-        for edge in edges:
-            rv += edge + '\n'
-
-        rv += '}\n'
+        rv += '}'
         return rv
-
 
 
 class ProgramDependenceGraph:
     def __init__(self, function: SSAFunction):
         self.function = function
-        self.cfg = ControlFlowGraph(function)  # 使用已有的 CFG
+        self.cfg = ControlFlowGraph(function)
         self.control_edges = self._extract_control_dependence()
         self.data_edges = self._extract_data_dependence()
 
     def _extract_control_dependence(self):
-        # 提取控制依赖关系，直接使用 CFG 中的控制流信息
-        control_edges = self.cfg.get_edges()
+        idoms = self.cfg.get_immediate_dominators()
+        control_edges = []
+        for block in self.function:
+            idom = idoms.get(block)
+            if idom is not None:
+                control_edges.append((idom, block))
         return control_edges
 
     def _extract_data_dependence(self):
         data_edges = []
         definitions = {}
-        usages = {}
 
         for block in self.function:
-            block_id = f'block_{block.offset:#x}'
-
-            # 记录定义和使用的变量
             for insn in block:
-                # 定义的变量
                 if insn.return_value is not None:
-                    defined_var = insn.return_value
-                    definitions[defined_var] = block_id
+                    definitions[insn.return_value] = block
 
-                # 使用的变量
                 used_vars = insn.arguments
                 for var in used_vars:
                     if var in definitions:
-                        data_edges.append((definitions[var], block_id))
+                        data_edges.append((definitions[var], block))
 
         return data_edges
 
     def dot(self):
-        rv = 'digraph PDG {\n'
-        rv += 'graph [fontname = "consolas"];\n'
-        rv += 'node [fontname = "consolas"];\n'
-        rv += 'edge [fontname = "consolas"];\n'
+        rv = 'digraph PDG {'
+        rv += 'graph [fontname = "consolas"];'
+        rv += 'node [fontname = "consolas"];'
+        rv += 'edge [fontname = "consolas"];'
 
-        # 函数头信息
         name = self.function.desc()
         hash = f'Hash: {self.function.hash:#x}'
         offset = f'Start: {self.function.offset:#x}'
         arguments = f'Arguments: {self.function.arguments()}'
         storage = f'Storage: {self.function.storage}'
         function_desc = [name, hash, offset, arguments, storage]
-        rv += f'ff [label="{{' + '\\l'.join(function_desc) + '\\l}}", shape="record" ];\n'
+        rv += f'ff [label="{{' + '\l'.join(function_desc) + '\l}}", shape="record" ];'
 
-        # 添加基本块节点
         for block in self.function:
-            block_id = f'block_{block.offset:#x}'
-            block_body = '\\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
-            block_body = block_body.replace('<', '\\<').replace('>', '\\>')
-            rv += f'{block_id} [label="{block_body}\\l", shape="record"];\n'
+            block_body = '\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
+            block_body = block_body.replace('<', '\<').replace('>', '\>')
+            rv += f'block_{block.offset:#x} [label="{block_body}\l", shape="record"] ;'
 
-        # 添加控制依赖边
         for edge in self.control_edges:
-            rv += f'{edge[0]} -> {edge[1]} [label="control", color="blue"];\n'
+            rv += f'block_{edge[0].offset:#x} -> block_{edge[1].offset:#x} [label="control", color="blue"];'
 
-        # 添加数据依赖边
         for edge in self.data_edges:
-            rv += f'{edge[0]} -> {edge[1]} [label="data", color="green"];\n'
+            rv += f'block_{edge[0].offset:#x} -> block_{edge[1].offset:#x} [label="data", color="green"];'
 
-        rv += '}\n'
+        rv += '}'
         return rv
 
 
-# 创建 SystemDependenceGraph 类
 class SystemDependenceGraph:
     def __init__(self, functions: List[SSAFunction]):
-        # 存储每个函数的 PDG
         self.function_pdgs = {func: ProgramDependenceGraph(func) for func in functions}
         self.call_edges = self._extract_call_dependence()
         self.parameter_edges = self._extract_parameter_dependence()
@@ -251,99 +250,69 @@ class SystemDependenceGraph:
             for block in caller:
                 for insn in block:
                     if insn.insn.name in ('CALL', 'CALLCODE', 'DELEGATECALL'):
-                        # 检查 insn.arguments[1] 是否为 ConcreteStackValue
                         if isinstance(insn.arguments[1], ConcreteStackValue):
                             callee_hash = insn.arguments[1].concrete_value
                             callee = self._find_function_by_hash(callee_hash)
-
                             if callee:
-                                callee_entry = f'block_{callee.blocks[0].offset:#x}'
-                                caller_block = f'block_{block.offset:#x}'
-                                call_edges.append((caller_block, callee_entry))
-
+                                call_edges.append((block, callee.blocks[0]))
         return call_edges
+
     def _extract_parameter_dependence(self):
         parameter_edges = []
         for caller, caller_pdg in self.function_pdgs.items():
             for block in caller:
                 for insn in block:
                     if insn.insn.name in ('CALL', 'CALLCODE', 'DELEGATECALL'):
-                        # 使用 resolve 方法尝试获取 arguments[1] 的具体值
                         resolved_arg, _ = insn.arguments[1].resolve()
-
-                        # 检查 resolved_arg 是否有 concrete_value 属性
                         if hasattr(resolved_arg, 'concrete_value'):
                             callee_hash = resolved_arg.concrete_value
                             callee = self._find_function_by_hash(callee_hash)
-
                             if callee:
-                                # 添加输入参数边
                                 for i, arg in enumerate(insn.arguments[2:]):
                                     if arg in caller_pdg.data_edges:
                                         callee_param = f'param_{i}'
-                                        caller_block = f'block_{block.offset:#x}'
-                                        parameter_edges.append((caller_block, callee_param))
-
-                                # 添加输出参数边
+                                        parameter_edges.append((block, callee_param))
                                 if insn.return_value:
-                                    callee_return = f'block_{callee.blocks[-1].offset:#x}'
-                                    caller_block = f'block_{block.offset:#x}'
-                                    parameter_edges.append((callee_return, caller_block))
-
+                                    parameter_edges.append((callee.blocks[-1], block))
         return parameter_edges
 
     def _find_function_by_hash(self, hash_value):
-        for function in self.function_pdgs:
-            if function.hash == hash_value:
-                return function
-        return None
+        return next((func for func in self.function_pdgs if func.hash == hash_value), None)
 
-    
     def dot(self):
-        rv = 'digraph SDG {\n'
-        rv += 'graph [fontname = "consolas"];\n'
-        rv += 'node [fontname = "consolas"];\n'
-        rv += 'edge [fontname = "consolas"];\n'
+        rv = 'digraph SDG {'
+        rv += 'graph [fontname = "consolas"];'
+        rv += 'node [fontname = "consolas"];'
+        rv += 'edge [fontname = "consolas"];'
 
-        # 遍历所有函数的 PDG
         for func, pdg in self.function_pdgs.items():
-            # 函数头信息
-            name = func.desc().replace('<', '\\<').replace('>', '\\>')
+            name = func.desc().replace('<', '\<').replace('>', '\>')
             hash = f'Hash: {func.hash:#x}'
             offset = f'Start: {func.offset:#x}'
             arguments = f'Arguments: {func.arguments()}'
             storage = f'Storage: {func.storage}'
 
-            # 创建节点名称，去掉括号和其他特殊字符
             node_name = name.replace('(', '').replace(')', '').replace(' ', '_')
-            
             function_desc = [name, hash, offset, arguments, storage]
-            rv += f'{node_name} [label="{{' + '\\l'.join(function_desc) + '\\l}}", shape="record" ];\n'
+            rv += f'{node_name} [label="{{' + '\l'.join(function_desc) + '\l}}", shape="record" ];'
 
-            # 添加基本块节点
             for block in func:
-                block_id = f'block_{block.offset:#x}'
-                block_body = '\\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
-                block_body = block_body.replace('<', '\\<').replace('>', '\\>').replace('(', '\\(').replace(')', '\\)')
-                rv += f'{block_id} [label="{block_body}\\l", shape="record"];\n'
+                block_body = '\l'.join([f'{insn.offset:#x}: {insn}' for insn in block])
+                block_body = block_body.replace('<', '\<').replace('>', '\>').replace('(', '\(').replace(')', '\)')
+                rv += f'block_{block.offset:#x} [label="{block_body}\l", shape="record"] ;'
 
-            # 添加控制依赖边
             for edge in pdg.control_edges:
-                rv += f'{edge[0]} -> {edge[1]} [label="control", color="blue"];\n'
+                rv += f'block_{edge[0].offset:#x} -> block_{edge[1].offset:#x} [label="control", color="blue"];'
 
-            # 添加数据依赖边
             for edge in pdg.data_edges:
-                rv += f'{edge[0]} -> {edge[1]} [label="data", color="green"];\n'
+                rv += f'block_{edge[0].offset:#x} -> block_{edge[1].offset:#x} [label="data", color="green"];'
 
-            # 添加参数依赖边
             if hasattr(pdg, 'parameter_edges'):
                 for edge in pdg.parameter_edges:
-                    rv += f'{edge[0]} -> {edge[1]} [label="param", color="orange"];\n'
+                    rv += f'{edge[0].offset:#x} -> {edge[1]} [label="param", color="orange"];'
 
-        rv += '}\n'
+        rv += '}'
         return rv
-
-
 
 
 
