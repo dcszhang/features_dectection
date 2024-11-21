@@ -5,3 +5,4 @@ from .main import main
 from .analyze import *
 from .evmasm import *
 from .recover import Recover
+from .similarity import *

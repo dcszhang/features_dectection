@@ -11,12 +11,12 @@ import tempfile
 from typing import Sequence
 from collections import OrderedDict
 import rattle
-import networkx as nx
+from .similarity import process_second_feature
+
 # This might not be true, but I have a habit of running the wrong python version and this is to save me frustration
 assert (sys.version_info.major >= 3 and sys.version_info.minor >= 6)
 from pprint import pprint
 logger = logging.getLogger(__name__)
-
 # 定义地址变量来保存所有路径
 all_trace_paths = {}
 # 定义全局变量，用于存储所有变量的追踪路径
@@ -111,16 +111,6 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
                 if hasattr(insn, 'return_value') and insn.return_value is not None:
                     variable = insn.return_value  # 获取指令的返回值变量
                     all_instructions_by_variable[variable] = insn  # 将变量和对应的指令保存到字典中
-    # 按偏移量对指令进行排序
-    # all_instructions_by_offset = OrderedDict(sorted(all_instructions_by_offset.items()))
-    # 打印每个指令的结构
-    # for offset, insn in all_instructions_by_offset.items():
-    #     print(f"Offset: {offset}, Instruction: {insn}")
-    #     print(f"Attributes of insn: {dir(insn)}")
-    #     print(f"Return value: {getattr(insn, 'return_value', 'No return_value')}")
-    #     print(f"Arguments: {getattr(insn, 'arguments', 'No arguments')}")
-
-    # print_all_instructions_by_offset(all_instructions_by_offset)
     can_send, functions_that_can_send = ssa.can_send_ether()
     func_index = 0
     if can_send:
@@ -221,72 +211,8 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
             print("\n", end='')
 
         print("")
-
-
-
-    # 对 SSA 中每个函数生成PDG
-    for function in sorted(ssa.functions, key=lambda f: f.offset):
-        cfg = rattle.ControlFlowGraph(function)
-        pdg = rattle.ProgramDependenceGraph(function)
-        # 写入 PDG 的 dot 文件
-        with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
-            t.write(pdg.dot())
-            t.flush()
-            dot_path = t.name
-
-        try:
-            os.makedirs('output', exist_ok=True)
-        except:
-            pass
-
-        # 生成 SDG 的 PDF 文件
-        out_file_pdf = f'output/pdg_{function.offset:#x}.pdf'
-        subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
-        print(f'[+] Wrote PDG to {out_file_pdf}')
-
-
-    def generate_sdg(ssa_functions):
-        # 创建 SystemDependenceGraph 实例
-        sdg = rattle.SystemDependenceGraph(ssa_functions)
-        
-        # 写入 SDG 的 dot 文件
-        with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
-            t.write(sdg.dot())
-            t.flush()
-            dot_path = t.name
-
-        try:
-            os.makedirs('output', exist_ok=True)
-        except:
-            pass
-
-        # 生成 SDG 的 PDF 文件
-        out_file_pdf = 'output/sdg.pdf'
-        subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
-        print(f'[+] Wrote SDG to {out_file_pdf}')
-        # 使用 CallBacktracking 对 SDG 中的函数进行回溯
-        call_backtracking = rattle.CallBacktracking(sdg)
-
-        # 获取回溯结果的 DOT 内容并保存为独立的 DOT 文件和 PDF 文件
-        dot_content = call_backtracking.dot()
-        dot_sections = dot_content.split('digraph ')
-        
-        for section in dot_sections:
-            if section.strip():  # 确保不是空字符串
-                func_name_end = section.find(' {')
-                func_name = section[:func_name_end].strip() if func_name_end != -1 else 'unknown'
-                dot_content = 'digraph ' + section
-
-                with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
-                    t.write(dot_content)
-                    t.flush()
-                    dot_path = t.name
-
-                # 生成每个 CALL 路径的 PDF 文件
-                out_file_pdf = f'output/{func_name}_call_backtrack.pdf'
-                subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
-                print(f'[+] Wrote backtrack paths to {out_file_pdf}')
-    generate_sdg(sorted(ssa.functions, key=lambda f: f.offset))
+    # 第二个特征分析
+    process_second_feature(ssa)
     if args.stdout_to:
         sys.stdout = orig_stdout
         args.stdout_to.close()
@@ -295,57 +221,9 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
         args.input.close()
 
 
-import networkx as nx
 
-def build_cfg_from_slice(call_slice , all_instructions_by_variable):
-    """
-    根据收集的指令切片构建控制流图（CFG）。
-    param call_slice: 包含 CALL 指令及其前置指令的切片
-    return: 表示控制流图的 networkx.DiGraph 对象
-    """
-    G = nx.DiGraph()
 
-    # 为每个指令添加一个节点
-    for insn in call_slice:
-        G.add_node(insn)
-
-    # 添加控制流边，根据指令间的控制依赖关系
-    for insn in call_slice:
-        # 遍历每个指令的前置指令
-        for argument in insn.arguments:
-            if argument in all_instructions_by_variable:
-                prev_insn = all_instructions_by_variable[argument]
-                if prev_insn in call_slice:
-                    G.add_edge(prev_insn, insn)  # 添加前置指令到当前指令的边
-
-    return G
-
-def collect_call_slice(call_insn, all_instructions_by_variable):
-    """
-    收集与 CALL 指令相关的所有前置指令，形成一个切片。
-    param call_insn: CALL 指令
-    param all_instructions_by_variable: 包含所有指令的字典，以变量为键，指令为值
-    return: 包含所有相关指令的列表（切片）
-    """
-    call_slice = []           # 用于存储指令切片
-    visited = set()           # 用于记录访问过的指令，防止重复
-    instructions_to_trace = [call_insn]  # 初始化栈，从 CALL 指令开始
-
-    while instructions_to_trace:
-        insn = instructions_to_trace.pop()  # 获取栈顶指令
-        if insn in visited:
-            continue                       # 如果已访问，跳过
-
-        visited.add(insn)                  # 标记为已访问
-        call_slice.append(insn)            # 将指令加入切片
-
-        # 追溯当前指令的前置指令
-        for argument in insn.arguments:
-            if argument in all_instructions_by_variable:
-                prev_insn = all_instructions_by_variable[argument]
-                instructions_to_trace.append(prev_insn)  # 将前置指令加入栈中
-
-    return call_slice
+    
 
 
 
@@ -358,60 +236,32 @@ def collect_call_slice(call_insn, all_instructions_by_variable):
 
 
 
-def find_blocks_with_call(function):
-    """
-    找到包含 CALL 指令的所有基本块。
-    param function: 包含基本块的函数对象
-    return: 包含 CALL 指令的基本块列表
-    """
-    blocks_with_call = []
-    for block in function.blocks:
-        for insn in block:
-            if insn.insn.name == 'CALL':
-                blocks_with_call.append(block)
-                break
-    return blocks_with_call
-
-
-def backward_slicing_from_call(blocks_with_call):
-    """
-    对包含 CALL 指令的块进行 backward slicing，去除与 CALL 无关的块。
-    param blocks_with_call: 包含 CALL 指令的基本块列表
-    return: 与 CALL 指令相关的基本块集合
-    """
-    related_blocks = set(blocks_with_call)
-    visited_blocks = set(blocks_with_call)
-
-    while blocks_with_call:
-        current_block = blocks_with_call.pop(0)
-        
-        for pred in current_block.in_edges:
-            if pred not in visited_blocks:
-                related_blocks.add(pred)
-                visited_blocks.add(pred)
-                blocks_with_call.append(pred)
-
-    return related_blocks
-
-def save_related_blocks_as_graph(related_blocks):
-    """
-    将与 CALL 相关的基本块保存为 networkx 图。
-    param related_blocks: 与 CALL 相关的基本块集合
-    return: networkx 图对象
-    """
-    G = nx.DiGraph()
-    for block in related_blocks:
-        block_id = block.offset
-        G.add_node(block_id)
-        if block.fallthrough_edge and block.fallthrough_edge in related_blocks:
-            G.add_edge(block_id, block.fallthrough_edge.offset)
-        for jump_block in block.jump_edges:
-            if jump_block in related_blocks:
-                G.add_edge(block_id, jump_block.offset)
-    return G
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 解决第一个特征相关的函数
 def backward_analysis(variable, all_instructions_by_variable, visited=None):
     """
     通过变量名直接查找定义，依据操作数进行递归回溯。
