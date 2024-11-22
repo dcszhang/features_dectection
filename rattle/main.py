@@ -66,7 +66,7 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
     ssa = rattle.Recover(args.input.read(), edges=edges, optimize=args.optimize,
                          split_functions=args.no_split_functions)
 
-    # print(ssa)
+    print(ssa)
 
     # 假设这个集合存储了所有指令，偏移量作为键
     all_instructions_by_variable = {}
@@ -362,7 +362,6 @@ def analyze_saved_traces(address_variable, all_instructions_by_variable):
         has_external_call = False
         depth_threshold=5
         for insn in trace:
-
             # 检查是否是字符串操作指令
             if insn.insn.name in ['MLOAD', 'CALLDATALOAD']:
                 has_dynamic_input = True

@@ -137,38 +137,79 @@ def generate_sdg(ssa_functions, model_path):
             print(f'[+] Wrote backtrack paths to {out_file_pdf}')
             # 提取基本块并计算嵌入
             for func, paths in call_backtracking.get_backtrack_results().items():
-                func_embedding = {}
-                edges = []
-                for path in paths:
-                    for block in path:
-                        if block.offset not in func_embedding:
+                for path_idx, path in enumerate(paths):
+                    func_embedding = {}
+                    edges = {"control": [], "data": []}
+                    # 当前路径的基本块集合
+                    path_blocks = set(path)
+                    # 提取当前路径的基本块嵌入
+                    for block in path_blocks:
+                        if block.offset not in func_embedding:  # 避免重复计算
                             func_embedding[block.offset] = compute_block_embedding(block, model)
-                    # 提取路径中的边
-                    for i in range(len(path) - 1):
-                        edges.append((path[i].offset, path[i + 1].offset))
-                function_embeddings[function_key] = func_embedding
-                adjacency_matrices[function_key] = generate_adjacency_matrix(func_embedding, edges)
+                        # 获取控制依赖边和数据依赖边
+                        pdg = call_backtracking.sdg.function_pdgs[func]
+                        edges["control"].extend([
+                            (edge[0].offset, edge[1].offset)
+                                for edge in pdg.control_edges
+                                if edge[0] in path and edge[1] in path
+                            ])
+                        edges["data"].extend([
+                            (edge[0].offset, edge[1].offset)
+                                for edge in pdg.data_edges
+                                if edge[0] in path and edge[1] in path
+                            ])
+                        
+                        # 打印调试信息
+                        # print(f"Control Edges for {function_key}: {edges['control']}")
+                        # print(f"Data Edges for {function_key}: {edges['data']}")
+
+                        # 打印调试信息
+                        # print(f"Control Edges for {function_key}: {edges['control']}")
+                        # print(f"Data Edges for {function_key}: {edges['data']}")
+                        # for i in range(len(path) - 1):
+                        #     edges.append((path[i].offset, path[i + 1].offset))
+                        # 使用权重生成加权邻接矩阵
+                    control_weight = 5.0
+                    data_weight = 1.0
+                    function_key = f"{func.desc()}:CallBacktrack_{path_idx}"
+                    function_embeddings[function_key] = func_embedding
+                    adjacency_matrix = generate_weighted_adjacency_matrix(
+                        func_embedding, edges["control"], edges["data"], control_weight, data_weight
+                    )
+                    adjacency_matrices[function_key] = adjacency_matrix
     return function_embeddings , adjacency_matrices
 
 
-def generate_adjacency_matrix(node_embeddings, edges):
+def generate_weighted_adjacency_matrix(node_embeddings, control_edges, data_edges, control_weight, data_weight):
     """
-    根据边列表生成邻接矩阵。
+    根据控制依赖边和数据依赖边生成加权邻接矩阵。
     :param node_embeddings: {block_offset: embedding} 字典
-    :param edges: [(src, dst), ...] 边列表
-    :return: 邻接矩阵
+    :param control_edges: [(src, dst), ...] 控制依赖边列表
+    :param data_edges: [(src, dst), ...] 数据依赖边列表
+    :param control_weight: 控制依赖边的权重
+    :param data_weight: 数据依赖边的权重
+    :return: 加权邻接矩阵 (N, N)
     """
     num_nodes = len(node_embeddings)
     node_to_idx = {node: idx for idx, node in enumerate(node_embeddings.keys())}
     adjacency_matrix = np.zeros((num_nodes, num_nodes), dtype=np.float32)
 
-    for src, dst in edges:
+    # 添加控制依赖边
+    for src, dst in control_edges:
         if src in node_to_idx and dst in node_to_idx:
             i, j = node_to_idx[src], node_to_idx[dst]
-            adjacency_matrix[i, j] = 1.0  # 有向图
-            adjacency_matrix[j, i] = 1.0  # 如果需要无向图，添加这一行
+            adjacency_matrix[i, j] += control_weight
+            adjacency_matrix[j, i] += control_weight  # 如果需要无向边，保留这一行
+
+    # 添加数据依赖边
+    for src, dst in data_edges:
+        if src in node_to_idx and dst in node_to_idx:
+            i, j = node_to_idx[src], node_to_idx[dst]
+            adjacency_matrix[i, j] += data_weight
+            adjacency_matrix[j, i] += data_weight  # 如果需要无向边，保留这一行
 
     return adjacency_matrix
+
 
 
 def compute_block_embedding(block, model):

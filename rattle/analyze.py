@@ -359,12 +359,13 @@ class CallBacktracking:
 
     def _perform_backtracking(self):
         backtrack_results = {}
+        seen_paths = set()  # 用于去重路径的集合
         for func, pdg in self.sdg.function_pdgs.items():
-            backtrack_paths = self._backtrack_calls_in_function(pdg)
+            backtrack_paths = self._backtrack_calls_in_function(pdg,seen_paths)
             backtrack_results[func] = backtrack_paths
         return backtrack_results
 
-    def _backtrack_calls_in_function(self, pdg: ProgramDependenceGraph):
+    def _backtrack_calls_in_function(self, pdg: ProgramDependenceGraph, seen_paths: set):
         backtrack_paths = []
         for block in pdg.function:
             for insn in block:
@@ -372,7 +373,11 @@ class CallBacktracking:
                     visited = set()
                     path = []
                     self._backtrack(block, pdg, visited, path, exclude_calls=True)
-                    backtrack_paths.append(path)
+                     # 转换路径为元组，用于去重
+                    path_tuple = tuple(block.offset for block in path)
+                    if path_tuple not in seen_paths:  # 如果路径未出现过
+                        seen_paths.add(path_tuple)
+                        backtrack_paths.append(path)
         return backtrack_paths
 
     def _backtrack(self, block, pdg, visited, path, exclude_calls=False):
