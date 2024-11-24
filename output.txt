@@ -1,1042 +1,4 @@
 WARNING:rattle.recover:Found CALLDATALOAD(0) user that isn't an EQ %1426 = PHI(%9, %1237, %1396, %1420, #47fba)
-<SSAFunction name:_dispatch hash:0x0 offset:0x0 num_blocks:46 blocks:<SSABasicBlock offset:0x0 num_insns:5 in: [] insns:[
-	<0x4: MSTORE(#40, #80)>
-	<0x7: %3 = CALLDATASIZE()>
-	<0x8: %4 = LT(%3, #4)>
-	<0xc: JUMPI(#43, %4)>
-	<0xc: ICALL(_fallthrough)>
-] fallthrough:None jumps:[0x43]>
-<SSABasicBlock offset:0x43 num_insns:2 in: [0x0] insns:[
-	<0x44: %23 = CALLDATASIZE()>
-	<0x48: JUMPI(#4a, %23)>
-] fallthrough:0x49 jumps:[0x4a]>
-<SSABasicBlock offset:0x49 num_insns:1 in: [0x43] insns:[
-	<0x49: STOP()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x402 num_insns:1 in: [] insns:[
-	<0x406: JUMP(#5a1)>
-] fallthrough:None jumps:[0x5b7]>
-<SSABasicBlock offset:0x419 num_insns:1 in: [] insns:[
-	<0x41d: JUMP(#5a1)>
-] fallthrough:None jumps:[0x5b7]>
-<SSABasicBlock offset:0x5b7 num_insns:5 in: [0x402,0x419,0x7d8] insns:[
-	<0x5b7: %1510 = PHI(#2, %565)>
-	<0x5b7: %1511 = PHI(#0, %563)>
-	<0x5bb: %423 = LT(%1510, #2a)>
-	<0x5bc: %424 = ISZERO(%423)>
-	<0x5c0: JUMPI(#7ed, %424)>
-] fallthrough:0x5c1 jumps:[0x7ed]>
-<SSABasicBlock offset:0x5c1 num_insns:4 in: [0x5b7] insns:[
-	<0x5c5: %427 = MUL(%1511, #100)>
-	<0x5cb: %428 = MLOAD(%1513)>
-	<0x5cd: %429 = LT(%1510, %428)>
-	<0x5d1: JUMPI(#5d3, %429)>
-] fallthrough:0x5d2 jumps:[0x5d3]>
-<SSABasicBlock offset:0x5d2 num_insns:1 in: [0x5c1] insns:[
-	<0x5d2: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x5d3 num_insns:11 in: [0x5c1] insns:[
-	<0x5d6: %432 = ADD(#20, %1510)>
-	<0x5d7: %433 = ADD(%432, %1513)>
-	<0x5d8: %434 = MLOAD(%433)>
-	<0x5db: %436 = SHR(#f8, %434)>
-	<0x5de: %438 = SHL(#f8, %436)>
-	<0x5e1: %440 = SHR(#f8, %438)>
-	<0x5e4: %442 = AND(#ff, %440)>
-	<0x5eb: %444 = ADD(%1510, #1)>
-	<0x5ed: %445 = MLOAD(%1513)>
-	<0x5ef: %446 = LT(%444, %445)>
-	<0x5f3: JUMPI(#5f5, %446)>
-] fallthrough:0x5f4 jumps:[0x5f5]>
-<SSABasicBlock offset:0x5f4 num_insns:1 in: [0x5d3] insns:[
-	<0x5f4: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x5f5 num_insns:12 in: [0x5d3] insns:[
-	<0x5f8: %449 = ADD(#20, %444)>
-	<0x5f9: %450 = ADD(%449, %1513)>
-	<0x5fa: %451 = MLOAD(%450)>
-	<0x5fd: %453 = SHR(#f8, %451)>
-	<0x600: %455 = SHL(#f8, %453)>
-	<0x603: %457 = SHR(#f8, %455)>
-	<0x606: %459 = AND(#ff, %457)>
-	<0x621: %462 = AND(#ffffffffffffffffffffffffffffffffffffffff, %442)>
-	<0x622: %463 = LT(%462, #61)>
-	<0x623: %464 = ISZERO(%463)>
-	<0x625: %465 = ISZERO(%464)>
-	<0x629: JUMPI(#646, %465)>
-] fallthrough:0x62a jumps:[0x646]>
-<SSABasicBlock offset:0x62a num_insns:3 in: [0x5f5] insns:[
-	<0x643: %469 = AND(#ffffffffffffffffffffffffffffffffffffffff, %442)>
-	<0x644: %470 = GT(%469, #66)>
-	<0x645: %471 = ISZERO(%470)>
-] fallthrough:0x646 jumps:None>
-<SSABasicBlock offset:0x646 num_insns:4 in: [0x5f5,0x62a] insns:[
-	<0x646: %1513 = PHI()>
-	<0x646: %1515 = PHI(%464, %471)>
-	<0x647: %472 = ISZERO(%1515)>
-	<0x64b: JUMPI(#656, %472)>
-] fallthrough:0x64c jumps:[0x656]>
-<SSABasicBlock offset:0x64c num_insns:2 in: [0x646] insns:[
-	<0x64f: %475 = SUB(%442, #57)>
-	<0x655: JUMP(#6f0)>
-] fallthrough:None jumps:[0x6f0]>
-<SSABasicBlock offset:0x656 num_insns:5 in: [0x646] insns:[
-	<0x66f: %479 = AND(#ffffffffffffffffffffffffffffffffffffffff, %442)>
-	<0x670: %480 = LT(%479, #41)>
-	<0x671: %481 = ISZERO(%480)>
-	<0x673: %482 = ISZERO(%481)>
-	<0x677: JUMPI(#694, %482)>
-] fallthrough:0x678 jumps:[0x694]>
-<SSABasicBlock offset:0x678 num_insns:3 in: [0x656] insns:[
-	<0x691: %486 = AND(#ffffffffffffffffffffffffffffffffffffffff, %442)>
-	<0x692: %487 = GT(%486, #46)>
-	<0x693: %488 = ISZERO(%487)>
-] fallthrough:0x694 jumps:None>
-<SSABasicBlock offset:0x694 num_insns:3 in: [0x656,0x678] insns:[
-	<0x694: %1516 = PHI(%481, %488)>
-	<0x695: %489 = ISZERO(%1516)>
-	<0x699: JUMPI(#6a4, %489)>
-] fallthrough:0x69a jumps:[0x6a4]>
-<SSABasicBlock offset:0x69a num_insns:2 in: [0x694] insns:[
-	<0x69d: %492 = SUB(%442, #37)>
-	<0x6a3: JUMP(#6ef)>
-] fallthrough:None jumps:[0x6ef]>
-<SSABasicBlock offset:0x6a4 num_insns:5 in: [0x694] insns:[
-	<0x6bd: %496 = AND(#ffffffffffffffffffffffffffffffffffffffff, %442)>
-	<0x6be: %497 = LT(%496, #30)>
-	<0x6bf: %498 = ISZERO(%497)>
-	<0x6c1: %499 = ISZERO(%498)>
-	<0x6c5: JUMPI(#6e2, %499)>
-] fallthrough:0x6c6 jumps:[0x6e2]>
-<SSABasicBlock offset:0x6c6 num_insns:3 in: [0x6a4] insns:[
-	<0x6df: %503 = AND(#ffffffffffffffffffffffffffffffffffffffff, %442)>
-	<0x6e0: %504 = GT(%503, #39)>
-	<0x6e1: %505 = ISZERO(%504)>
-] fallthrough:0x6e2 jumps:None>
-<SSABasicBlock offset:0x6e2 num_insns:3 in: [0x6a4,0x6c6] insns:[
-	<0x6e2: %1517 = PHI(%498, %505)>
-	<0x6e3: %506 = ISZERO(%1517)>
-	<0x6e7: JUMPI(#6ee, %506)>
-] fallthrough:0x6e8 jumps:[0x6ee]>
-<SSABasicBlock offset:0x6e8 num_insns:1 in: [0x6e2] insns:[
-	<0x6eb: %509 = SUB(%442, #30)>
-] fallthrough:0x6ee jumps:None>
-<SSABasicBlock offset:0x6ee num_insns:1 in: [0x6e2,0x6e8] insns:[
-	<0x6ee: %1521 = PHI(%442, %509)>
-] fallthrough:0x6ef jumps:None>
-<SSABasicBlock offset:0x6ef num_insns:1 in: [0x69a,0x6ee] insns:[
-	<0x6ef: %1522 = PHI(%492, %1521)>
-] fallthrough:0x6f0 jumps:None>
-<SSABasicBlock offset:0x6f0 num_insns:7 in: [0x64c,0x6ef] insns:[
-	<0x6f0: %1523 = PHI(%475, %1522)>
-	<0x6f0: %1528 = PHI()>
-	<0x709: %512 = AND(#ffffffffffffffffffffffffffffffffffffffff, %459)>
-	<0x70a: %513 = LT(%512, #61)>
-	<0x70b: %514 = ISZERO(%513)>
-	<0x70d: %515 = ISZERO(%514)>
-	<0x711: JUMPI(#72e, %515)>
-] fallthrough:0x712 jumps:[0x72e]>
-<SSABasicBlock offset:0x712 num_insns:3 in: [0x6f0] insns:[
-	<0x72b: %519 = AND(#ffffffffffffffffffffffffffffffffffffffff, %459)>
-	<0x72c: %520 = GT(%519, #66)>
-	<0x72d: %521 = ISZERO(%520)>
-] fallthrough:0x72e jumps:None>
-<SSABasicBlock offset:0x72e num_insns:3 in: [0x6f0,0x712] insns:[
-	<0x72e: %1518 = PHI(%514, %521)>
-	<0x72f: %522 = ISZERO(%1518)>
-	<0x733: JUMPI(#73e, %522)>
-] fallthrough:0x734 jumps:[0x73e]>
-<SSABasicBlock offset:0x734 num_insns:2 in: [0x72e] insns:[
-	<0x737: %525 = SUB(%459, #57)>
-	<0x73d: JUMP(#7d8)>
-] fallthrough:None jumps:[0x7d8]>
-<SSABasicBlock offset:0x73e num_insns:5 in: [0x72e] insns:[
-	<0x757: %529 = AND(#ffffffffffffffffffffffffffffffffffffffff, %459)>
-	<0x758: %530 = LT(%529, #41)>
-	<0x759: %531 = ISZERO(%530)>
-	<0x75b: %532 = ISZERO(%531)>
-	<0x75f: JUMPI(#77c, %532)>
-] fallthrough:0x760 jumps:[0x77c]>
-<SSABasicBlock offset:0x760 num_insns:3 in: [0x73e] insns:[
-	<0x779: %536 = AND(#ffffffffffffffffffffffffffffffffffffffff, %459)>
-	<0x77a: %537 = GT(%536, #46)>
-	<0x77b: %538 = ISZERO(%537)>
-] fallthrough:0x77c jumps:None>
-<SSABasicBlock offset:0x77c num_insns:3 in: [0x73e,0x760] insns:[
-	<0x77c: %1519 = PHI(%531, %538)>
-	<0x77d: %539 = ISZERO(%1519)>
-	<0x781: JUMPI(#78c, %539)>
-] fallthrough:0x782 jumps:[0x78c]>
-<SSABasicBlock offset:0x782 num_insns:2 in: [0x77c] insns:[
-	<0x785: %542 = SUB(%459, #37)>
-	<0x78b: JUMP(#7d7)>
-] fallthrough:None jumps:[0x7d7]>
-<SSABasicBlock offset:0x78c num_insns:5 in: [0x77c] insns:[
-	<0x7a5: %546 = AND(#ffffffffffffffffffffffffffffffffffffffff, %459)>
-	<0x7a6: %547 = LT(%546, #30)>
-	<0x7a7: %548 = ISZERO(%547)>
-	<0x7a9: %549 = ISZERO(%548)>
-	<0x7ad: JUMPI(#7ca, %549)>
-] fallthrough:0x7ae jumps:[0x7ca]>
-<SSABasicBlock offset:0x7ae num_insns:3 in: [0x78c] insns:[
-	<0x7c7: %553 = AND(#ffffffffffffffffffffffffffffffffffffffff, %459)>
-	<0x7c8: %554 = GT(%553, #39)>
-	<0x7c9: %555 = ISZERO(%554)>
-] fallthrough:0x7ca jumps:None>
-<SSABasicBlock offset:0x7ca num_insns:3 in: [0x78c,0x7ae] insns:[
-	<0x7ca: %1520 = PHI(%548, %555)>
-	<0x7cb: %556 = ISZERO(%1520)>
-	<0x7cf: JUMPI(#7d6, %556)>
-] fallthrough:0x7d0 jumps:[0x7d6]>
-<SSABasicBlock offset:0x7d0 num_insns:1 in: [0x7ca] insns:[
-	<0x7d3: %559 = SUB(%459, #30)>
-] fallthrough:0x7d6 jumps:None>
-<SSABasicBlock offset:0x7d6 num_insns:1 in: [0x7ca,0x7d0] insns:[
-	<0x7d6: %1524 = PHI(%459, %559)>
-] fallthrough:0x7d7 jumps:None>
-<SSABasicBlock offset:0x7d7 num_insns:1 in: [0x782,0x7d6] insns:[
-	<0x7d7: %1525 = PHI(%542, %1524)>
-] fallthrough:0x7d8 jumps:None>
-<SSABasicBlock offset:0x7d8 num_insns:6 in: [0x734,0x7d7] insns:[
-	<0x7d8: %1526 = PHI(%525, %1525)>
-	<0x7dd: %561 = MUL(%1523, #10)>
-	<0x7de: %562 = ADD(%561, %1526)>
-	<0x7e0: %563 = ADD(%427, %562)>
-	<0x7e6: %565 = ADD(%1510, #2)>
-	<0x7ec: JUMP(#5b7)>
-] fallthrough:None jumps:[0x5b7]>
-<SSABasicBlock offset:0x7ed num_insns:1 in: [0x5b7] insns:[
-	<0x7f9: JUMP(%1528)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xc9b num_insns:1 in: [] insns:[
-	<0xc9b: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xc9c num_insns:2 in: [] insns:[
-	<0xc9c: MSTORE8(<Unresolved sp:-1 block:0xc9c>, <Unresolved sp:-2 block:0xc9c>)>
-	<0xccc: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xccd num_insns:1 in: [] insns:[
-	<0xccd: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xcce num_insns:1 in: [] insns:[
-	<0xcce: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xccf num_insns:3 in: [] insns:[
-	<0xccf: MSTORE(<Unresolved sp:-1 block:0xccf>, <Unresolved sp:-2 block:0xccf>)>
-	<0xd00: %861 = SHA3(#6b65, #616e2074)>
-	<0xd15: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xd16 num_insns:1 in: [] insns:[
-	<0xd16: INVALID()>
-] fallthrough:None jumps:None>>
-
-<SSAFunction name:_fallthrough hash:0x0 offset:0xd num_blocks:5 blocks:<SSABasicBlock offset:0xd num_insns:4 in: [] insns:[
-	<0xf: %7 = CALLDATALOAD(#0)>
-	<0x12: %9 = SHR(#e0, %7)>
-	<0x19: %11 = EQ(#6c02a931, %9)>
-	<0x0: ICONDCALL(tokenName(), %11)>
-] fallthrough:0x1e jumps:None>
-<SSABasicBlock offset:0x1e num_insns:2 in: [0xd] insns:[
-	<0x24: %14 = EQ(#7b61c320, %9)>
-	<0x0: ICONDCALL(tokenSymbol(), %14)>
-] fallthrough:0x29 jumps:None>
-<SSABasicBlock offset:0x29 num_insns:2 in: [0x1e] insns:[
-	<0x2f: %17 = EQ(#be9a6555, %9)>
-	<0x0: ICONDCALL(start(), %17)>
-] fallthrough:0x34 jumps:None>
-<SSABasicBlock offset:0x34 num_insns:2 in: [0x29] insns:[
-	<0x3a: %20 = EQ(#d4e93292, %9)>
-	<0x0: ICONDCALL(withdrawal(), %20)>
-] fallthrough:0x4a jumps:None>
-<SSABasicBlock offset:0x4a num_insns:1 in: [0x34,0x43] insns:[
-	<0x4e: REVERT(#0, #0)>
-] fallthrough:None jumps:None>>
-
-<SSAFunction name:tokenName() hash:0x6c02a931 offset:0x4f num_blocks:14 blocks:<SSABasicBlock offset:0x4f num_insns:3 in: [] insns:[
-	<0x50: %26 = CALLVALUE()>
-	<0x52: %27 = ISZERO(%26)>
-	<0x56: JUMPI(#5b, %27)>
-] fallthrough:0x57 jumps:[0x183]>
-<SSABasicBlock offset:0x57 num_insns:1 in: [0x4f] insns:[
-	<0x5a: REVERT(#0, #0)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x64 num_insns:9 in: [0x183,0x1db,0x210] insns:[
-	<0x67: %33 = MLOAD(#40)>
-	<0x6c: %35 = ADD(#20, %33)>
-	<0x6f: %36 = SUB(%35, %33)>
-	<0x71: MSTORE(%33, %36)>
-	<0x75: %37 = MLOAD(%144)>
-	<0x77: MSTORE(%35, %37)>
-	<0x7a: %39 = ADD(#20, %35)>
-	<0x7e: %40 = MLOAD(%144)>
-	<0x82: %42 = ADD(#20, %144)>
-] fallthrough:0x89 jumps:None>
-<SSABasicBlock offset:0x89 num_insns:4 in: [0x64,0x92] insns:[
-	<0x89: %865 = PHI(#0, %51)>
-	<0x8c: %44 = LT(%865, %40)>
-	<0x8d: %45 = ISZERO(%44)>
-	<0x91: JUMPI(#a4, %45)>
-] fallthrough:0x92 jumps:[0xa4]>
-<SSABasicBlock offset:0x92 num_insns:6 in: [0x89] insns:[
-	<0x94: %47 = ADD(%42, %865)>
-	<0x95: %48 = MLOAD(%47)>
-	<0x98: %49 = ADD(%39, %865)>
-	<0x99: MSTORE(%49, %48)>
-	<0x9d: %51 = ADD(%865, #20)>
-	<0xa3: JUMP(#89)>
-] fallthrough:None jumps:[0x89]>
-<SSABasicBlock offset:0xa4 num_insns:4 in: [0x89] insns:[
-	<0xad: %53 = ADD(%40, %39)>
-	<0xb1: %55 = AND(#1f, %40)>
-	<0xb3: %56 = ISZERO(%55)>
-	<0xb7: JUMPI(#d1, %56)>
-] fallthrough:0xb8 jumps:[0xd1]>
-<SSABasicBlock offset:0xb8 num_insns:9 in: [0xa4] insns:[
-	<0xba: %58 = SUB(%53, %55)>
-	<0xbc: %59 = MLOAD(%58)>
-	<0xc2: %62 = SUB(#20, %55)>
-	<0xc6: %64 = EXP(#100, %62)>
-	<0xc7: %65 = SUB(%64, #1)>
-	<0xc8: %66 = NOT(%65)>
-	<0xc9: %67 = AND(%66, %59)>
-	<0xcb: MSTORE(%58, %67)>
-	<0xce: %69 = ADD(#20, %58)>
-] fallthrough:0xd1 jumps:None>
-<SSABasicBlock offset:0xd1 num_insns:4 in: [0xa4,0xb8] insns:[
-	<0xd1: %866 = PHI(%53, %69)>
-	<0xd9: %71 = MLOAD(#40)>
-	<0xdc: %72 = SUB(%866, %71)>
-	<0xde: RETURN(%71, %72)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x183 num_insns:25 in: [0x4f] insns:[
-	<0x187: %125 = SLOAD(#0)>
-	<0x18d: %128 = AND(#1, %125)>
-	<0x18e: %129 = ISZERO(%128)>
-	<0x192: %131 = MUL(#100, %129)>
-	<0x193: %132 = SUB(%131, #1)>
-	<0x194: %133 = AND(%132, %125)>
-	<0x198: %135 = DIV(%133, #2)>
-	<0x19c: %137 = ADD(#1f, %135)>
-	<0x1a1: %139 = DIV(%137, #20)>
-	<0x1a2: %140 = MUL(%139, #20)>
-	<0x1a5: %142 = ADD(#20, %140)>
-	<0x1a8: %144 = MLOAD(#40)>
-	<0x1ab: %145 = ADD(%144, %142)>
-	<0x1ae: MSTORE(#40, %145)>
-	<0x1b5: MSTORE(%144, %135)>
-	<0x1b8: %148 = ADD(#20, %144)>
-	<0x1bb: %149 = SLOAD(#0)>
-	<0x1c1: %152 = AND(#1, %149)>
-	<0x1c2: %153 = ISZERO(%152)>
-	<0x1c6: %155 = MUL(#100, %153)>
-	<0x1c7: %156 = SUB(%155, #1)>
-	<0x1c8: %157 = AND(%156, %149)>
-	<0x1cc: %159 = DIV(%157, #2)>
-	<0x1ce: %160 = ISZERO(%159)>
-	<0x1d2: JUMPI(#219, %160)>
-] fallthrough:0x1d3 jumps:[0x64]>
-<SSABasicBlock offset:0x1d3 num_insns:2 in: [0x183] insns:[
-	<0x1d6: %163 = LT(#1f, %159)>
-	<0x1da: JUMPI(#1ee, %163)>
-] fallthrough:0x1db jumps:[0x1ee]>
-<SSABasicBlock offset:0x1db num_insns:6 in: [0x1d3] insns:[
-	<0x1e0: %166 = SLOAD(#0)>
-	<0x1e1: %167 = DIV(%166, #100)>
-	<0x1e2: %168 = MUL(%167, #100)>
-	<0x1e4: MSTORE(%148, %168)>
-	<0x1e8: %170 = ADD(#20, %148)>
-	<0x1ed: JUMP(#219)>
-] fallthrough:None jumps:[0x64]>
-<SSABasicBlock offset:0x1ee num_insns:3 in: [0x1d3] insns:[
-	<0x1f0: %172 = ADD(%148, %159)>
-	<0x1f5: MSTORE(#0, #0)>
-	<0x1fa: %176 = SHA3(#0, #20)>
-] fallthrough:0x1fc jumps:None>
-<SSABasicBlock offset:0x1fc num_insns:8 in: [0x1ee,0x1fc] insns:[
-	<0x1fc: %869 = PHI(%176, %179)>
-	<0x1fc: %870 = PHI(%148, %181)>
-	<0x1fe: %177 = SLOAD(%869)>
-	<0x200: MSTORE(%870, %177)>
-	<0x204: %179 = ADD(#1, %869)>
-	<0x208: %181 = ADD(#20, %870)>
-	<0x20b: %182 = GT(%172, %181)>
-	<0x20f: JUMPI(#1fc, %182)>
-] fallthrough:0x210 jumps:[0x1fc]>
-<SSABasicBlock offset:0x210 num_insns:3 in: [0x1fc] insns:[
-	<0x212: %184 = SUB(%181, %172)>
-	<0x215: %186 = AND(#1f, %184)>
-	<0x217: %187 = ADD(%172, %186)>
-] fallthrough:0x64 jumps:None>>
-
-<SSAFunction name:tokenSymbol() hash:0x7b61c320 offset:0xdf num_blocks:14 blocks:<SSABasicBlock offset:0xdf num_insns:3 in: [] insns:[
-	<0xe0: %73 = CALLVALUE()>
-	<0xe2: %74 = ISZERO(%73)>
-	<0xe6: JUMPI(#eb, %74)>
-] fallthrough:0xe7 jumps:[0x221]>
-<SSABasicBlock offset:0xe7 num_insns:1 in: [0xdf] insns:[
-	<0xea: REVERT(#0, #0)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xf4 num_insns:9 in: [0x221,0x279,0x2ae] insns:[
-	<0xf7: %80 = MLOAD(#40)>
-	<0xfc: %82 = ADD(#20, %80)>
-	<0xff: %83 = SUB(%82, %80)>
-	<0x101: MSTORE(%80, %83)>
-	<0x105: %84 = MLOAD(%208)>
-	<0x107: MSTORE(%82, %84)>
-	<0x10a: %86 = ADD(#20, %82)>
-	<0x10e: %87 = MLOAD(%208)>
-	<0x112: %89 = ADD(#20, %208)>
-] fallthrough:0x119 jumps:None>
-<SSABasicBlock offset:0x119 num_insns:4 in: [0xf4,0x122] insns:[
-	<0x119: %867 = PHI(#0, %98)>
-	<0x11c: %91 = LT(%867, %87)>
-	<0x11d: %92 = ISZERO(%91)>
-	<0x121: JUMPI(#134, %92)>
-] fallthrough:0x122 jumps:[0x134]>
-<SSABasicBlock offset:0x122 num_insns:6 in: [0x119] insns:[
-	<0x124: %94 = ADD(%89, %867)>
-	<0x125: %95 = MLOAD(%94)>
-	<0x128: %96 = ADD(%86, %867)>
-	<0x129: MSTORE(%96, %95)>
-	<0x12d: %98 = ADD(%867, #20)>
-	<0x133: JUMP(#119)>
-] fallthrough:None jumps:[0x119]>
-<SSABasicBlock offset:0x134 num_insns:4 in: [0x119] insns:[
-	<0x13d: %100 = ADD(%87, %86)>
-	<0x141: %102 = AND(#1f, %87)>
-	<0x143: %103 = ISZERO(%102)>
-	<0x147: JUMPI(#161, %103)>
-] fallthrough:0x148 jumps:[0x161]>
-<SSABasicBlock offset:0x148 num_insns:9 in: [0x134] insns:[
-	<0x14a: %105 = SUB(%100, %102)>
-	<0x14c: %106 = MLOAD(%105)>
-	<0x152: %109 = SUB(#20, %102)>
-	<0x156: %111 = EXP(#100, %109)>
-	<0x157: %112 = SUB(%111, #1)>
-	<0x158: %113 = NOT(%112)>
-	<0x159: %114 = AND(%113, %106)>
-	<0x15b: MSTORE(%105, %114)>
-	<0x15e: %116 = ADD(#20, %105)>
-] fallthrough:0x161 jumps:None>
-<SSABasicBlock offset:0x161 num_insns:4 in: [0x134,0x148] insns:[
-	<0x161: %868 = PHI(%100, %116)>
-	<0x169: %118 = MLOAD(#40)>
-	<0x16c: %119 = SUB(%868, %118)>
-	<0x16e: RETURN(%118, %119)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x221 num_insns:25 in: [0xdf] insns:[
-	<0x225: %189 = SLOAD(#1)>
-	<0x22b: %192 = AND(#1, %189)>
-	<0x22c: %193 = ISZERO(%192)>
-	<0x230: %195 = MUL(#100, %193)>
-	<0x231: %196 = SUB(%195, #1)>
-	<0x232: %197 = AND(%196, %189)>
-	<0x236: %199 = DIV(%197, #2)>
-	<0x23a: %201 = ADD(#1f, %199)>
-	<0x23f: %203 = DIV(%201, #20)>
-	<0x240: %204 = MUL(%203, #20)>
-	<0x243: %206 = ADD(#20, %204)>
-	<0x246: %208 = MLOAD(#40)>
-	<0x249: %209 = ADD(%208, %206)>
-	<0x24c: MSTORE(#40, %209)>
-	<0x253: MSTORE(%208, %199)>
-	<0x256: %212 = ADD(#20, %208)>
-	<0x259: %213 = SLOAD(#1)>
-	<0x25f: %216 = AND(#1, %213)>
-	<0x260: %217 = ISZERO(%216)>
-	<0x264: %219 = MUL(#100, %217)>
-	<0x265: %220 = SUB(%219, #1)>
-	<0x266: %221 = AND(%220, %213)>
-	<0x26a: %223 = DIV(%221, #2)>
-	<0x26c: %224 = ISZERO(%223)>
-	<0x270: JUMPI(#2b7, %224)>
-] fallthrough:0x271 jumps:[0xf4]>
-<SSABasicBlock offset:0x271 num_insns:2 in: [0x221] insns:[
-	<0x274: %227 = LT(#1f, %223)>
-	<0x278: JUMPI(#28c, %227)>
-] fallthrough:0x279 jumps:[0x28c]>
-<SSABasicBlock offset:0x279 num_insns:6 in: [0x271] insns:[
-	<0x27e: %230 = SLOAD(#1)>
-	<0x27f: %231 = DIV(%230, #100)>
-	<0x280: %232 = MUL(%231, #100)>
-	<0x282: MSTORE(%212, %232)>
-	<0x286: %234 = ADD(#20, %212)>
-	<0x28b: JUMP(#2b7)>
-] fallthrough:None jumps:[0xf4]>
-<SSABasicBlock offset:0x28c num_insns:3 in: [0x271] insns:[
-	<0x28e: %236 = ADD(%212, %223)>
-	<0x293: MSTORE(#0, #1)>
-	<0x298: %240 = SHA3(#0, #20)>
-] fallthrough:0x29a jumps:None>
-<SSABasicBlock offset:0x29a num_insns:8 in: [0x28c,0x29a] insns:[
-	<0x29a: %871 = PHI(%240, %243)>
-	<0x29a: %872 = PHI(%212, %245)>
-	<0x29c: %241 = SLOAD(%871)>
-	<0x29e: MSTORE(%872, %241)>
-	<0x2a2: %243 = ADD(#1, %871)>
-	<0x2a6: %245 = ADD(#20, %872)>
-	<0x2a9: %246 = GT(%236, %245)>
-	<0x2ad: JUMPI(#29a, %246)>
-] fallthrough:0x2ae jumps:[0x29a]>
-<SSABasicBlock offset:0x2ae num_insns:3 in: [0x29a] insns:[
-	<0x2b0: %248 = SUB(%245, %236)>
-	<0x2b3: %250 = AND(#1f, %248)>
-	<0x2b5: %251 = ADD(%236, %250)>
-] fallthrough:0xf4 jumps:None>>
-
-<SSAFunction name:start() hash:0xbe9a6555 offset:0x2bf num_blocks:1 blocks:<SSABasicBlock offset:0x2bf num_insns:12 in: [] insns:[
-	<0x2e3: %254 = MLOAD(#40)>
-	<0x2e8: %256 = ADD(#20, %254)>
-	<0x2eb: %257 = SUB(%256, %254)>
-	<0x2ed: MSTORE(%254, %257)>
-	<0x2f1: MSTORE(%256, #48)>
-	<0x2f4: %260 = ADD(#20, %256)>
-	<0x2fc: CODECOPY(%260, #ccf, #48)>
-	<0x2ff: %264 = ADD(#60, %260)>
-	<0x305: %266 = MLOAD(#40)>
-	<0x308: %267 = SUB(%264, %266)>
-	<0x30a: LOG1(%266, %267, #cf34ef537ac33ee1ac626ca1587a0a7e8e51561e5514f8cb36afa1c5102b3bab)>
-	<0x311: JUMP(#3f5)>
-] fallthrough:None jumps:[0x423]>>
-
-<SSAFunction name:withdrawal() hash:0xd4e93292 offset:0x35a num_blocks:78 blocks:<SSABasicBlock offset:0x177 num_insns:1 in: [0x357,0x3f2,0x407,0x41e,0x58b] insns:[
-	<0x178: STOP()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x181 num_insns:1 in: [0x357,0x3f2,0x407,0x41e,0x58b] insns:[
-	<0x182: STOP()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x312 num_insns:14 in: [0x357,0x3f2,0x407,0x41e,0x58b] insns:[
-	<0x312: %1506 = PHI(%717, %1505)>
-	<0x312: %1505 = PHI(%1449, %1502)>
-	<0x312: %1507 = PHI(%1235, %1280)>
-	<0x328: %271 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1506)>
-	<0x32c: %273 = SELFBALANCE()>
-	<0x32f: %274 = ISZERO(%273)>
-	<0x330: %275 = MUL(%274, #8fc)>
-	<0x334: %277 = MLOAD(#40)>
-	<0x339: %280 = MLOAD(#40)>
-	<0x33c: %281 = SUB(%277, %280)>
-	<0x341: %282 = CALL(%275, %271, %273, %280, %281, %280, #0)>
-	<0x347: %283 = ISZERO(%282)>
-	<0x349: %284 = ISZERO(%283)>
-	<0x34d: JUMPI(#357, %284)>
-] fallthrough:0x34e jumps:[0x357]>
-<SSABasicBlock offset:0x34e num_insns:4 in: [0x312] insns:[
-	<0x34e: %286 = RETURNDATASIZE()>
-	<0x352: RETURNDATACOPY(#0, #0, %286)>
-	<0x353: %288 = RETURNDATASIZE()>
-	<0x356: REVERT(#0, %288)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x357 num_insns:1 in: [0x312] insns:[
-	<0x359: JUMP(%1507)>
-] fallthrough:None jumps:[0x177,0x181,0x312,0x3ad,0x46f,0x4c9,0x4de,0x4e7,0x4fc,0x505,0x51a,0x523,0x805,0xa77]>
-<SSABasicBlock offset:0x35a num_insns:12 in: [] insns:[
-	<0x37e: %292 = MLOAD(#40)>
-	<0x383: %294 = ADD(#20, %292)>
-	<0x386: %295 = SUB(%294, %292)>
-	<0x388: MSTORE(%292, %295)>
-	<0x38c: MSTORE(%294, #33)>
-	<0x38f: %298 = ADD(#20, %294)>
-	<0x397: CODECOPY(%298, #c9c, #33)>
-	<0x39a: %302 = ADD(#40, %298)>
-	<0x3a0: %304 = MLOAD(#40)>
-	<0x3a3: %305 = SUB(%302, %304)>
-	<0x3a5: LOG1(%304, %305, #cf34ef537ac33ee1ac626ca1587a0a7e8e51561e5514f8cb36afa1c5102b3bab)>
-	<0x3ac: JUMP(#40c)>
-] fallthrough:None jumps:[0x423]>
-<SSABasicBlock offset:0x3ad num_insns:13 in: [0x357,0x3f2,0x407,0x41e,0x58b] insns:[
-	<0x3ad: %1508 = PHI(%717, %1505)>
-	<0x3ad: %1509 = PHI(%1235, %1280)>
-	<0x3c3: %309 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1508)>
-	<0x3c7: %311 = SELFBALANCE()>
-	<0x3ca: %312 = ISZERO(%311)>
-	<0x3cb: %313 = MUL(%312, #8fc)>
-	<0x3cf: %315 = MLOAD(#40)>
-	<0x3d4: %318 = MLOAD(#40)>
-	<0x3d7: %319 = SUB(%315, %318)>
-	<0x3dc: %320 = CALL(%313, %309, %311, %318, %319, %318, #0)>
-	<0x3e2: %321 = ISZERO(%320)>
-	<0x3e4: %322 = ISZERO(%321)>
-	<0x3e8: JUMPI(#3f2, %322)>
-] fallthrough:0x3e9 jumps:[0x3f2]>
-<SSABasicBlock offset:0x3e9 num_insns:4 in: [0x3ad] insns:[
-	<0x3e9: %324 = RETURNDATASIZE()>
-	<0x3ed: RETURNDATACOPY(#0, #0, %324)>
-	<0x3ee: %326 = RETURNDATASIZE()>
-	<0x3f1: REVERT(#0, %326)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x3f2 num_insns:1 in: [0x3ad] insns:[
-	<0x3f4: JUMP(%1509)>
-] fallthrough:None jumps:[0x177,0x181,0x312,0x3ad,0x46f,0x4c9,0x4de,0x4e7,0x4fc,0x505,0x51a,0x523,0x805,0xa77]>
-<SSABasicBlock offset:0x407 num_insns:1 in: [0x58b] insns:[
-	<0x40b: JUMP(%1449)>
-] fallthrough:None jumps:[0x177,0x181,0x312,0x3ad,0x46f,0x4c9,0x4de,0x4e7,0x4fc,0x505,0x51a,0x523,0x805,0xa77]>
-<SSABasicBlock offset:0x41e num_insns:1 in: [0x58b] insns:[
-	<0x422: JUMP(%1449)>
-] fallthrough:None jumps:[0x177,0x181,0x312,0x3ad,0x46f,0x4c9,0x4de,0x4e7,0x4fc,0x505,0x51a,0x523,0x805,0xa77]>
-<SSABasicBlock offset:0x423 num_insns:12 in: [0x2bf,0x35a] insns:[
-	<0x423: %912 = PHI(#312, #3ad)>
-	<0x423: %961 = PHI(#177, #181)>
-	<0x423: %1078 = PHI(#402, #419)>
-	<0x423: %1100 = PHI(#0)>
-	<0x423: %1103 = PHI(#407, #41e)>
-	<0x42c: %341 = MLOAD(#40)>
-	<0x430: %343 = ADD(#40, %341)>
-	<0x433: MSTORE(#40, %343)>
-	<0x438: MSTORE(%341, #1)>
-	<0x43b: %347 = ADD(#20, %341)>
-	<0x45e: MSTORE(%347, #7800000000000000000000000000000000000000000000000000000000000000)>
-	<0x469: JUMP(#7fa)>
-] fallthrough:None jumps:[0x805]>
-<SSABasicBlock offset:0x46f num_insns:4 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x46f: %1535 = PHI(%717, %944, %1505)>
-	<0x46f: %1541 = PHI(%1023, %1235, %1280)>
-	<0x46f: %1551 = PHI(%1034, %1449, %1502)>
-	<0x473: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x474 num_insns:11 in: [0x58b,0xa72,0xbc3] insns:[
-	<0x474: %1488 = PHI(%1359, %1485)>
-	<0x474: %1478 = PHI(%1118, %1477)>
-	<0x474: %1461 = PHI(%1173, %1458)>
-	<0x474: %1451 = PHI(%1034, %1165, %1449)>
-	<0x474: %1429 = PHI(%1177, %1426)>
-	<0x474: %1320 = PHI(%1086, %1159, %1319)>
-	<0x474: %1304 = PHI(%1182, %1296)>
-	<0x474: %1282 = PHI(%1064, %1162, %1280)>
-	<0x474: %1259 = PHI(%1179, %1251)>
-	<0x474: %945 = PHI(%717, %944)>
-	<0x487: JUMP(#bd2)>
-] fallthrough:None jumps:[0x805]>
-<SSABasicBlock offset:0x4c9 num_insns:4 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x4c9: %1536 = PHI(%717, %944, %1505)>
-	<0x4c9: %1542 = PHI(%1023, %1235, %1280)>
-	<0x4c9: %1552 = PHI(%1034, %1449, %1502)>
-	<0x4cd: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x4ce num_insns:9 in: [0x58b,0xa72,0xbc3] insns:[
-	<0x4ce: %1420 = PHI(%1396, %1419)>
-	<0x4ce: %1238 = PHI(%1213, %1237)>
-	<0x4ce: %1167 = PHI(%1034, %1165)>
-	<0x4ce: %1057 = PHI(%717, %944)>
-	<0x4ce: %1283 = PHI(%1179, %1251)>
-	<0x4ce: %1321 = PHI(%1182, %1296)>
-	<0x4ce: %1452 = PHI(%1177, %1426)>
-	<0x4ce: %1479 = PHI(%1173, %1458)>
-	<0x4dd: JUMP(#805)>
-] fallthrough:None jumps:[0x805]>
-<SSABasicBlock offset:0x4de num_insns:2 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x4de: %1019 = PHI(%717, %944)>
-	<0x4e6: JUMP(#805)>
-] fallthrough:None jumps:[0x805]>
-<SSABasicBlock offset:0x4e7 num_insns:4 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x4e7: %1537 = PHI(%717, %944, %1505)>
-	<0x4e7: %1543 = PHI(%1023, %1235, %1280)>
-	<0x4e7: %1553 = PHI(%1034, %1449, %1502)>
-	<0x4eb: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x4fc num_insns:2 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x4fc: %1020 = PHI(%717, %944)>
-	<0x504: JUMP(#805)>
-] fallthrough:None jumps:[0x805]>
-<SSABasicBlock offset:0x505 num_insns:4 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x505: %1538 = PHI(%717, %944, %1505)>
-	<0x505: %1544 = PHI(%1023, %1235, %1280)>
-	<0x505: %1554 = PHI(%1034, %1449, %1502)>
-	<0x509: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x51a num_insns:2 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x51a: %1022 = PHI(%717, %944)>
-	<0x522: JUMP(#805)>
-] fallthrough:None jumps:[0x805]>
-<SSABasicBlock offset:0x523 num_insns:4 in: [0x357,0x3f2,0x407,0x41e,0x58b,0xa72] insns:[
-	<0x523: %1539 = PHI(%717, %944, %1505)>
-	<0x523: %1545 = PHI(%1023, %1235, %1280)>
-	<0x523: %1555 = PHI(%1034, %1449, %1502)>
-	<0x527: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x548 num_insns:7 in: [0xbc3] insns:[
-	<0x552: %407 = MLOAD(#40)>
-	<0x556: %409 = ADD(#40, %407)>
-	<0x559: MSTORE(#40, %409)>
-	<0x55e: MSTORE(%407, #1)>
-	<0x561: %413 = ADD(#20, %407)>
-	<0x584: MSTORE(%413, #3000000000000000000000000000000000000000000000000000000000000000)>
-	<0x58a: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x58b num_insns:1 in: [0xbc3] insns:[
-	<0x5a0: JUMP(%1417)>
-] fallthrough:None jumps:[0x177,0x181,0x312,0x3ad,0x407,0x41e,0x46f,0x474,0x4c9,0x4ce,0x4de,0x4e7,0x4fc,0x505,0x51a,0x523]>
-<SSABasicBlock offset:0x805 num_insns:22 in: [0x357,0x3f2,0x407,0x41e,0x423,0x474,0x4ce,0x4de,0x4fc,0x51a,0xbc3] insns:[
-	<0x805: %1495 = PHI(%1312, %1488)>
-	<0x805: %1485 = PHI(%1173, %1296, %1478, %1479)>
-	<0x805: %1468 = PHI(%1267, %1461)>
-	<0x805: %1458 = PHI(%1177, %1251, %1451, %1452)>
-	<0x805: %1436 = PHI(%1213, %1429)>
-	<0x805: %1426 = PHI(%9, %1237, %1396, %1420, #47fba)>
-	<0x805: %1366 = PHI(%912, %1187, %1361, #b120a)>
-	<0x805: %1334 = PHI(%1182, %1320, %1321)>
-	<0x805: %1312 = PHI(%1267, %1304)>
-	<0x805: %1296 = PHI(%1179, %1282, %1283)>
-	<0x805: %1267 = PHI(%1213, %1259)>
-	<0x805: %1251 = PHI(%945, %1213, %1238)>
-	<0x805: %1194 = PHI(%961, %1187, #e21df)>
-	<0x805: %1173 = PHI(#60, %1064, %1165, %1167, #9891e)>
-	<0x805: %1034 = PHI(#60, %1023, #474, #4ce)>
-	<0x805: %1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)>
-	<0x805: %1064 = PHI(#60, %717, %1034, %1057)>
-	<0x805: %1086 = PHI(%1064, %1078, #8e2c)>
-	<0x805: %1138 = PHI(%1086, %1100, %1126, #19bdb)>
-	<0x805: %1126 = PHI(%1086, %1103, %1118, #636c5)>
-	<0x805: %1116 = PHI(#47fba, #a6f65)>
-	<0x805: %1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)>
-] fallthrough:0x812 jumps:None>
-<SSABasicBlock offset:0x812 num_insns:4 in: [0x805,0x82c] insns:[
-	<0x812: %1117 = PHI(%579, %1116)>
-	<0x812: %1152 = PHI(#0, %576)>
-	<0x816: %573 = EQ(%1117, #0)>
-	<0x81a: JUMPI(#834, %573)>
-] fallthrough:0x81b jumps:[0x834]>
-<SSABasicBlock offset:0x81b num_insns:2 in: [0x812] insns:[
-	<0x81f: %576 = ADD(#1, %1152)>
-	<0x82a: JUMPI(#82c, #10)>
-] fallthrough:0x82b jumps:[0x82c]>
-<SSABasicBlock offset:0x82b num_insns:1 in: [0x81b] insns:[
-	<0x82b: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x82c num_insns:2 in: [0x81b] insns:[
-	<0x82d: %579 = DIV(%1117, #10)>
-	<0x833: JUMP(#812)>
-] fallthrough:None jumps:[0x812]>
-<SSABasicBlock offset:0x834 num_insns:3 in: [0x812] insns:[
-	<0x842: %583 = GT(%1152, #ffffffffffffffff)>
-	<0x844: %584 = ISZERO(%583)>
-	<0x848: JUMPI(#84d, %584)>
-] fallthrough:0x849 jumps:[0x84d]>
-<SSABasicBlock offset:0x849 num_insns:1 in: [0x834] insns:[
-	<0x84c: REVERT(#0, #0)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x84d num_insns:10 in: [0x834] insns:[
-	<0x851: %588 = MLOAD(#40)>
-	<0x855: MSTORE(%588, %1152)>
-	<0x859: %590 = ADD(#1f, %1152)>
-	<0x85c: %592 = NOT(#1f)>
-	<0x85d: %593 = AND(%592, %590)>
-	<0x860: %595 = ADD(#20, %593)>
-	<0x862: %596 = ADD(%588, %595)>
-	<0x865: MSTORE(#40, %596)>
-	<0x867: %598 = ISZERO(%1152)>
-	<0x86b: JUMPI(#880, %598)>
-] fallthrough:0x86c jumps:[0x889]>
-<SSABasicBlock offset:0x86c num_insns:5 in: [0x84d] insns:[
-	<0x86f: %601 = ADD(#20, %588)>
-	<0x873: %603 = MUL(%1152, #1)>
-	<0x875: %604 = CALLDATASIZE()>
-	<0x877: CALLDATACOPY(%601, %604, %603)>
-	<0x87a: %605 = ADD(%601, %603)>
-] fallthrough:0x889 jumps:None>
-<SSABasicBlock offset:0x889 num_insns:6 in: [0x84d,0x86c,0x8f1] insns:[
-	<0x889: %1118 = PHI(%612, %1117)>
-	<0x889: %1208 = PHI(%631, %1116)>
-	<0x889: %1532 = PHI(#0, %633)>
-	<0x88c: %607 = LT(%1532, %1152)>
-	<0x88d: %608 = ISZERO(%607)>
-	<0x891: JUMPI(#8ff, %608)>
-] fallthrough:0x892 jumps:[0x8ff]>
-<SSABasicBlock offset:0x892 num_insns:1 in: [0x889] insns:[
-	<0x899: JUMPI(#89b, #10)>
-] fallthrough:0x89a jumps:[0x89b]>
-<SSABasicBlock offset:0x89a num_insns:1 in: [0x892] insns:[
-	<0x89a: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x89b num_insns:2 in: [0x892] insns:[
-	<0x89c: %612 = MOD(%1208, #10)>
-	<0x8a6: JUMP(#bf2)>
-] fallthrough:None jumps:[0xbf2]>
-<SSABasicBlock offset:0x8a7 num_insns:5 in: [0xc96] insns:[
-	<0x8ad: %616 = SUB(%1152, %1532)>
-	<0x8ae: %617 = SUB(%616, #1)>
-	<0x8b0: %618 = MLOAD(%588)>
-	<0x8b2: %619 = LT(%617, %618)>
-	<0x8b6: JUMPI(#8b8, %619)>
-] fallthrough:0x8b7 jumps:[0x8b8]>
-<SSABasicBlock offset:0x8b7 num_insns:1 in: [0x8a7] insns:[
-	<0x8b7: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x8b8 num_insns:7 in: [0x8a7] insns:[
-	<0x8bb: %622 = ADD(#20, %617)>
-	<0x8bc: %623 = ADD(%622, %588)>
-	<0x8de: %625 = NOT(#ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)>
-	<0x8df: %626 = AND(%625, %1533)>
-	<0x8e4: %628 = BYTE(#0, %626)>
-	<0x8e6: MSTORE8(%623, %628)>
-	<0x8ef: JUMPI(#8f1, #10)>
-] fallthrough:0x8f0 jumps:[0x8f1]>
-<SSABasicBlock offset:0x8f0 num_insns:1 in: [0x8b8] insns:[
-	<0x8f0: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0x8f1 num_insns:3 in: [0x8b8] insns:[
-	<0x8f2: %631 = DIV(%1208, #10)>
-	<0x8f8: %633 = ADD(#1, %1532)>
-	<0x8fe: JUMP(#889)>
-] fallthrough:None jumps:[0x889]>
-<SSABasicBlock offset:0x8ff num_insns:4 in: [0x889] insns:[
-	<0x904: %636 = MLOAD(%588)>
-	<0x90a: %638 = EQ(%636, #4)>
-	<0x90b: %639 = ISZERO(%638)>
-	<0x90f: JUMPI(#95f, %639)>
-] fallthrough:0x910 jumps:[0x95f]>
-<SSABasicBlock offset:0x910 num_insns:7 in: [0x8ff] insns:[
-	<0x917: %644 = MLOAD(#40)>
-	<0x91b: %646 = ADD(#40, %644)>
-	<0x91e: MSTORE(#40, %646)>
-	<0x923: MSTORE(%644, #1)>
-	<0x926: %650 = ADD(#20, %644)>
-	<0x949: MSTORE(%650, #3000000000000000000000000000000000000000000000000000000000000000)>
-	<0x94f: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x95f num_insns:3 in: [0x8ff] insns:[
-	<0x963: %655 = EQ(%636, #3)>
-	<0x964: %656 = ISZERO(%655)>
-	<0x968: JUMPI(#9b8, %656)>
-] fallthrough:0x969 jumps:[0x9b8]>
-<SSABasicBlock offset:0x969 num_insns:7 in: [0x95f] insns:[
-	<0x970: %661 = MLOAD(#40)>
-	<0x974: %663 = ADD(#40, %661)>
-	<0x977: MSTORE(#40, %663)>
-	<0x97c: MSTORE(%661, #1)>
-	<0x97f: %667 = ADD(#20, %661)>
-	<0x9a2: MSTORE(%667, #3000000000000000000000000000000000000000000000000000000000000000)>
-	<0x9a8: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0x9b8 num_insns:3 in: [0x95f] insns:[
-	<0x9bc: %672 = EQ(%636, #2)>
-	<0x9bd: %673 = ISZERO(%672)>
-	<0x9c1: JUMPI(#a11, %673)>
-] fallthrough:0x9c2 jumps:[0xa11]>
-<SSABasicBlock offset:0x9c2 num_insns:7 in: [0x9b8] insns:[
-	<0x9c9: %678 = MLOAD(#40)>
-	<0x9cd: %680 = ADD(#40, %678)>
-	<0x9d0: MSTORE(#40, %680)>
-	<0x9d5: MSTORE(%678, #3)>
-	<0x9d8: %684 = ADD(#20, %678)>
-	<0x9fb: MSTORE(%684, #3030300000000000000000000000000000000000000000000000000000000000)>
-	<0xa01: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0xa11 num_insns:3 in: [0x9b8] insns:[
-	<0xa15: %689 = EQ(%636, #1)>
-	<0xa16: %690 = ISZERO(%689)>
-	<0xa1a: JUMPI(#a6a, %690)>
-] fallthrough:0xa1b jumps:[0xa72]>
-<SSABasicBlock offset:0xa1b num_insns:7 in: [0xa11] insns:[
-	<0xa22: %695 = MLOAD(#40)>
-	<0xa26: %697 = ADD(#40, %695)>
-	<0xa29: MSTORE(#40, %697)>
-	<0xa2e: MSTORE(%695, #4)>
-	<0xa31: %701 = ADD(#20, %695)>
-	<0xa54: MSTORE(%701, #3030303000000000000000000000000000000000000000000000000000000000)>
-	<0xa5a: JUMP(#a77)>
-] fallthrough:None jumps:[0xa77]>
-<SSABasicBlock offset:0xa72 num_insns:7 in: [0xa11,0xbc3] insns:[
-	<0xa72: %1419 = PHI(%1366, %1417)>
-	<0xa72: %1361 = PHI(%1126, %1359)>
-	<0xa72: %944 = PHI(%588, %717)>
-	<0xa72: %1237 = PHI(%1194, %1235)>
-	<0xa72: %1187 = PHI(%1138, %1185)>
-	<0xa72: %1534 = PHI(%1389, %1396)>
-	<0xa76: JUMP(%1534)>
-] fallthrough:None jumps:[0x46f,0x474,0x4c9,0x4ce,0x4de,0x4e7,0x4fc,0x505,0x51a,0x523]>
-<SSABasicBlock offset:0xa77 num_insns:29 in: [0x357,0x3f2,0x407,0x41e,0x46f,0x4c9,0x4e7,0x505,0x523,0x548,0x910,0x969,0x9c2,0xa1b,0xbc3] insns:[
-	<0xa77: %1502 = PHI(%1485, %1495)>
-	<0xa77: %1477 = PHI(%1280, %1449, %1458, %1468)>
-	<0xa77: %1449 = PHI(%1235, %1417, %1426, %1436)>
-	<0xa77: %1417 = PHI(%1185, %1359, %1366, %1396)>
-	<0xa77: %1396 = PHI(%1177, %1209, %1386, %1389)>
-	<0xa77: %1386 = PHI(#60, %1118, %1159, %1366)>
-	<0xa77: %1359 = PHI(%1126, %1173, %1182, %1334)>
-	<0xa77: %1319 = PHI(%1280, %1296, %1312)>
-	<0xa77: %1280 = PHI(%1235, %1251, %1267)>
-	<0xa77: %1235 = PHI(%1185, %1194, %1213)>
-	<0xa77: %1213 = PHI(%1023, %1179, %1209)>
-	<0xa77: %1209 = PHI(%1159, %1194, %1208)>
-	<0xa77: %1185 = PHI(%1138, %1182)>
-	<0xa77: %1182 = PHI(%1086, %1173, %1179)>
-	<0xa77: %1179 = PHI(%1064, %1177)>
-	<0xa77: %1177 = PHI(%1034, %1173)>
-	<0xa77: %1165 = PHI(#60, %636, %717, %1118, %1164)>
-	<0xa77: %1164 = PHI(#60, %717, %1064, %1162, #548)>
-	<0xa77: %1162 = PHI(%588, %717, %1086, %1159)>
-	<0xa77: %1159 = PHI(%1118, %1138, %1152)>
-	<0xa77: %1540 = PHI(%588, %717, %1162, %1535, %1536, %1537, %1538, %1539)>
-	<0xa77: %1546 = PHI(%407, %644, %661, %678, %695, %1118, %1164, %1541, %1542, %1543, %1544, %1545)>
-	<0xa77: %1556 = PHI(%1165, #539, #543, #58b, %1551, %1552, %1553, %1554, %1555, #950, #9a9, #a02, #a5b)>
-	<0xa86: %708 = MLOAD(%1540)>
-	<0xa88: %709 = MLOAD(%1546)>
-	<0xa89: %710 = ADD(%709, %708)>
-	<0xa94: %712 = GT(%710, #ffffffffffffffff)>
-	<0xa96: %713 = ISZERO(%712)>
-	<0xa9a: JUMPI(#a9f, %713)>
-] fallthrough:0xa9b jumps:[0xa9f]>
-<SSABasicBlock offset:0xa9b num_insns:1 in: [0xa77] insns:[
-	<0xa9e: REVERT(#0, #0)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xa9f num_insns:10 in: [0xa77] insns:[
-	<0xaa3: %717 = MLOAD(#40)>
-	<0xaa7: MSTORE(%717, %710)>
-	<0xaab: %719 = ADD(#1f, %710)>
-	<0xaae: %721 = NOT(#1f)>
-	<0xaaf: %722 = AND(%721, %719)>
-	<0xab2: %724 = ADD(#20, %722)>
-	<0xab4: %725 = ADD(%717, %724)>
-	<0xab7: MSTORE(#40, %725)>
-	<0xab9: %727 = ISZERO(%710)>
-	<0xabd: JUMPI(#ad2, %727)>
-] fallthrough:0xabe jumps:[0xae2]>
-<SSABasicBlock offset:0xabe num_insns:5 in: [0xa9f] insns:[
-	<0xac1: %730 = ADD(#20, %717)>
-	<0xac5: %732 = MUL(%710, #1)>
-	<0xac7: %733 = CALLDATASIZE()>
-	<0xac9: CALLDATACOPY(%730, %733, %732)>
-	<0xacc: %734 = ADD(%730, %732)>
-] fallthrough:0xae2 jumps:None>
-<SSABasicBlock offset:0xae2 num_insns:6 in: [0xa9f,0xabe,0xb14] insns:[
-	<0xae2: %1547 = PHI(#0, %767)>
-	<0xae2: %1548 = PHI(#0, %754)>
-	<0xae4: %738 = MLOAD(%1546)>
-	<0xae6: %739 = LT(%1547, %738)>
-	<0xae7: %740 = ISZERO(%739)>
-	<0xaeb: JUMPI(#b50, %740)>
-] fallthrough:0xaec jumps:[0xb55]>
-<SSABasicBlock offset:0xaec num_insns:3 in: [0xae2] insns:[
-	<0xaef: %742 = MLOAD(%1546)>
-	<0xaf1: %743 = LT(%1547, %742)>
-	<0xaf5: JUMPI(#af7, %743)>
-] fallthrough:0xaf6 jumps:[0xaf7]>
-<SSABasicBlock offset:0xaf6 num_insns:1 in: [0xaec] insns:[
-	<0xaf6: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xaf7 num_insns:9 in: [0xaec] insns:[
-	<0xafa: %746 = ADD(#20, %1547)>
-	<0xafb: %747 = ADD(%746, %1546)>
-	<0xafc: %748 = MLOAD(%747)>
-	<0xaff: %750 = SHR(#f8, %748)>
-	<0xb02: %752 = SHL(#f8, %750)>
-	<0xb08: %754 = ADD(#1, %1548)>
-	<0xb0c: %755 = MLOAD(%717)>
-	<0xb0e: %756 = LT(%1548, %755)>
-	<0xb12: JUMPI(#b14, %756)>
-] fallthrough:0xb13 jumps:[0xb14]>
-<SSABasicBlock offset:0xb13 num_insns:1 in: [0xaf7] insns:[
-	<0xb13: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xb14 num_insns:8 in: [0xaf7] insns:[
-	<0xb17: %759 = ADD(#20, %1548)>
-	<0xb18: %760 = ADD(%759, %717)>
-	<0xb3a: %762 = NOT(#ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)>
-	<0xb3b: %763 = AND(%762, %752)>
-	<0xb40: %765 = BYTE(#0, %763)>
-	<0xb42: MSTORE8(%760, %765)>
-	<0xb48: %767 = ADD(#1, %1547)>
-	<0xb4f: JUMP(#ae2)>
-] fallthrough:None jumps:[0xae2]>
-<SSABasicBlock offset:0xb55 num_insns:6 in: [0xae2,0xb87] insns:[
-	<0xb55: %1549 = PHI(#0, %799)>
-	<0xb55: %1550 = PHI(%786, %1548)>
-	<0xb57: %770 = MLOAD(%1540)>
-	<0xb59: %771 = LT(%1549, %770)>
-	<0xb5a: %772 = ISZERO(%771)>
-	<0xb5e: JUMPI(#bc3, %772)>
-] fallthrough:0xb5f jumps:[0xbc3]>
-<SSABasicBlock offset:0xb5f num_insns:3 in: [0xb55] insns:[
-	<0xb62: %774 = MLOAD(%1540)>
-	<0xb64: %775 = LT(%1549, %774)>
-	<0xb68: JUMPI(#b6a, %775)>
-] fallthrough:0xb69 jumps:[0xb6a]>
-<SSABasicBlock offset:0xb69 num_insns:1 in: [0xb5f] insns:[
-	<0xb69: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xb6a num_insns:9 in: [0xb5f] insns:[
-	<0xb6d: %778 = ADD(#20, %1549)>
-	<0xb6e: %779 = ADD(%778, %1540)>
-	<0xb6f: %780 = MLOAD(%779)>
-	<0xb72: %782 = SHR(#f8, %780)>
-	<0xb75: %784 = SHL(#f8, %782)>
-	<0xb7b: %786 = ADD(#1, %1550)>
-	<0xb7f: %787 = MLOAD(%717)>
-	<0xb81: %788 = LT(%1550, %787)>
-	<0xb85: JUMPI(#b87, %788)>
-] fallthrough:0xb86 jumps:[0xb87]>
-<SSABasicBlock offset:0xb86 num_insns:1 in: [0xb6a] insns:[
-	<0xb86: INVALID()>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xb87 num_insns:8 in: [0xb6a] insns:[
-	<0xb8a: %791 = ADD(#20, %1550)>
-	<0xb8b: %792 = ADD(%791, %717)>
-	<0xbad: %794 = NOT(#ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)>
-	<0xbae: %795 = AND(%794, %784)>
-	<0xbb3: %797 = BYTE(#0, %795)>
-	<0xbb5: MSTORE8(%792, %797)>
-	<0xbbb: %799 = ADD(#1, %1549)>
-	<0xbc2: JUMP(#b55)>
-] fallthrough:None jumps:[0xb55]>
-<SSABasicBlock offset:0xbc3 num_insns:1 in: [0xb55] insns:[
-	<0xbd1: JUMP(%1556)>
-] fallthrough:None jumps:[0x474,0x4ce,0x548,0x58b,0x805,0xa72,0xa77]>
-<SSABasicBlock offset:0xbf2 num_insns:5 in: [0x89b] insns:[
-	<0xbf8: %809 = AND(#ff, %612)>
-	<0xbfb: %811 = GT(#0, %809)>
-	<0xbfc: %812 = ISZERO(%811)>
-	<0xbfe: %813 = ISZERO(%812)>
-	<0xc02: JUMPI(#c0c, %813)>
-] fallthrough:0xc03 jumps:[0xc0c]>
-<SSABasicBlock offset:0xc03 num_insns:3 in: [0xbf2] insns:[
-	<0xc09: %817 = AND(#ff, %612)>
-	<0xc0a: %818 = GT(%817, #9)>
-	<0xc0b: %819 = ISZERO(%818)>
-] fallthrough:0xc0c jumps:None>
-<SSABasicBlock offset:0xc0c num_insns:3 in: [0xbf2,0xc03] insns:[
-	<0xc0c: %1557 = PHI(%812, %819)>
-	<0xc0d: %820 = ISZERO(%1557)>
-	<0xc11: JUMPI(#c41, %820)>
-] fallthrough:0xc12 jumps:[0xc41]>
-<SSABasicBlock offset:0xc12 num_insns:4 in: [0xc0c] insns:[
-	<0xc36: %824 = SHR(#f8, #3000000000000000000000000000000000000000000000000000000000000000)>
-	<0xc37: %825 = ADD(%824, %612)>
-	<0xc3a: %827 = SHL(#f8, %825)>
-	<0xc40: JUMP(#c96)>
-] fallthrough:None jumps:[0xc96]>
-<SSABasicBlock offset:0xc41 num_insns:5 in: [0xc0c] insns:[
-	<0xc45: %830 = AND(#ff, %612)>
-	<0xc48: %832 = GT(#a, %830)>
-	<0xc49: %833 = ISZERO(%832)>
-	<0xc4b: %834 = ISZERO(%833)>
-	<0xc4f: JUMPI(#c59, %834)>
-] fallthrough:0xc50 jumps:[0xc59]>
-<SSABasicBlock offset:0xc50 num_insns:3 in: [0xc41] insns:[
-	<0xc56: %838 = AND(#ff, %612)>
-	<0xc57: %839 = GT(%838, #f)>
-	<0xc58: %840 = ISZERO(%839)>
-] fallthrough:0xc59 jumps:None>
-<SSABasicBlock offset:0xc59 num_insns:3 in: [0xc41,0xc50] insns:[
-	<0xc59: %1558 = PHI(%833, %840)>
-	<0xc5a: %841 = ISZERO(%1558)>
-	<0xc5e: JUMPI(#c91, %841)>
-] fallthrough:0xc5f jumps:[0xc91]>
-<SSABasicBlock offset:0xc5f num_insns:5 in: [0xc59] insns:[
-	<0xc85: %846 = SHR(#f8, #6100000000000000000000000000000000000000000000000000000000000000)>
-	<0xc86: %847 = ADD(%846, %612)>
-	<0xc87: %848 = SUB(%847, #a)>
-	<0xc8a: %850 = SHL(#f8, %848)>
-	<0xc90: JUMP(#c96)>
-] fallthrough:None jumps:[0xc96]>
-<SSABasicBlock offset:0xc91 num_insns:1 in: [0xc59] insns:[
-	<0xc95: REVERT(#0, #0)>
-] fallthrough:None jumps:None>
-<SSABasicBlock offset:0xc96 num_insns:2 in: [0xc12,0xc5f] insns:[
-	<0xc96: %1533 = PHI(%827, %850)>
-	<0xc9a: JUMP(#8a7)>
-] fallthrough:None jumps:[0x8a7]>>
-
-
 Identified Functions:
 	Function: _dispatch starts at offset 0, argument offsets: []
 	Function: _fallthrough starts at offset 13, argument offsets: [(0, 32)]
@@ -1051,97 +13,97 @@ CALL/CALLCODE Instruction Detected:
 CALL/CALLCODE Instruction Detected:
   Arguments: [%313, %309, %311, %318, %319, %318, #0]
 [+] Contract can send ether from following functions:
-	- withdrawal()
+	- start()
 		%282 = CALL(%275, %271, %273, %280, %281, %280, #0)
 			To:	%271 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1506)
 			Trace:
 				%271 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1506)
 				%1506 = PHI(%717, %1505)
-				%717 = MLOAD(#40)
 				%1505 = PHI(%1449, %1502)
+				%717 = MLOAD(#40)
 				%1502 = PHI(%1485, %1495)
 				%1449 = PHI(%1235, %1417, %1426, %1436)
-				%1485 = PHI(%1173, %1296, %1478, %1479)
 				%1495 = PHI(%1312, %1488)
-				%1235 = PHI(%1185, %1194, %1213)
+				%1485 = PHI(%1173, %1296, %1478, %1479)
 				%1426 = PHI(%9, %1237, %1396, %1420, #47fba)
+				%1235 = PHI(%1185, %1194, %1213)
 				%1436 = PHI(%1213, %1429)
 				%1417 = PHI(%1185, %1359, %1366, %1396)
-				%1173 = PHI(#60, %1064, %1165, %1167, #9891e)
-				%1296 = PHI(%1179, %1282, %1283)
-				%1479 = PHI(%1173, %1458)
-				%1478 = PHI(%1118, %1477)
-				%1312 = PHI(%1267, %1304)
 				%1488 = PHI(%1359, %1485)
-				%1213 = PHI(%1023, %1179, %1209)
-				%1185 = PHI(%1138, %1182)
-				%1194 = PHI(%961, %1187, #e21df)
-				%1420 = PHI(%1396, %1419)
+				%1312 = PHI(%1267, %1304)
+				%1479 = PHI(%1173, %1458)
+				%1173 = PHI(#60, %1064, %1165, %1167, #9891e)
+				%1478 = PHI(%1118, %1477)
+				%1296 = PHI(%1179, %1282, %1283)
 				%1237 = PHI(%1194, %1235)
 				%9 = SHR(#e0, %7)
 				%1396 = PHI(%1177, %1209, %1386, %1389)
+				%1420 = PHI(%1396, %1419)
+				%1185 = PHI(%1138, %1182)
+				%1213 = PHI(%1023, %1179, %1209)
+				%1194 = PHI(%961, %1187, #e21df)
 				%1429 = PHI(%1177, %1426)
-				%1359 = PHI(%1126, %1173, %1182, %1334)
 				%1366 = PHI(%912, %1187, %1361, #b120a)
+				%1359 = PHI(%1126, %1173, %1182, %1334)
+				%1304 = PHI(%1182, %1296)
+				%1267 = PHI(%1213, %1259)
+				%1458 = PHI(%1177, %1251, %1451, %1452)
 				%1064 = PHI(#60, %717, %1034, %1057)
 				%1167 = PHI(%1034, %1165)
 				%1165 = PHI(#60, %636, %717, %1118, %1164)
-				%1283 = PHI(%1179, %1251)
-				%1282 = PHI(%1064, %1162, %1280)
-				%1179 = PHI(%1064, %1177)
-				%1458 = PHI(%1177, %1251, %1451, %1452)
 				%1118 = PHI(%612, %1117)
 				%1477 = PHI(%1280, %1449, %1458, %1468)
-				%1304 = PHI(%1182, %1296)
-				%1267 = PHI(%1213, %1259)
-				%1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)
-				%1209 = PHI(%1159, %1194, %1208)
-				%1182 = PHI(%1086, %1173, %1179)
-				%1138 = PHI(%1086, %1100, %1126, #19bdb)
-				%1187 = PHI(%1138, %1185)
-				%961 = PHI(#177, #181)
-				%1419 = PHI(%1366, %1417)
+				%1283 = PHI(%1179, %1251)
+				%1179 = PHI(%1064, %1177)
+				%1282 = PHI(%1064, %1162, %1280)
 				%7 = CALLDATALOAD(#0)
+				%1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)
+				%1209 = PHI(%1159, %1194, %1208)
 				%1177 = PHI(%1034, %1173)
 				%1386 = PHI(#60, %1118, %1159, %1366)
-				%1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)
+				%1419 = PHI(%1366, %1417)
+				%1182 = PHI(%1086, %1173, %1179)
+				%1138 = PHI(%1086, %1100, %1126, #19bdb)
+				%1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)
+				%961 = PHI(#177, #181)
+				%1187 = PHI(%1138, %1185)
+				%1361 = PHI(%1126, %1359)
+				%912 = PHI(#312, #3ad)
 				%1334 = PHI(%1182, %1320, %1321)
 				%1126 = PHI(%1086, %1103, %1118, #636c5)
-				%912 = PHI(#312, #3ad)
-				%1361 = PHI(%1126, %1359)
+				%1259 = PHI(%1179, %1251)
+				%1451 = PHI(%1034, %1165, %1449)
+				%1452 = PHI(%1177, %1426)
+				%1251 = PHI(%945, %1213, %1238)
 				%1057 = PHI(%717, %944)
 				%1034 = PHI(#60, %1023, #474, #4ce)
-				%1164 = PHI(#60, %717, %1064, %1162, #548)
 				%636 = MLOAD(%588)
-				%1251 = PHI(%945, %1213, %1238)
-				%1280 = PHI(%1235, %1251, %1267)
-				%1162 = PHI(%588, %717, %1086, %1159)
-				%1452 = PHI(%1177, %1426)
-				%1451 = PHI(%1034, %1165, %1449)
+				%1164 = PHI(#60, %717, %1064, %1162, #548)
 				%612 = MOD(%1208, #10)
 				%1117 = PHI(%579, %1116)
+				%1280 = PHI(%1235, %1251, %1267)
 				%1468 = PHI(%1267, %1461)
-				%1259 = PHI(%1179, %1251)
-				%1019 = PHI(%717, %944)
+				%1162 = PHI(%588, %717, %1086, %1159)
+				%1208 = PHI(%631, %1116)
+				%1159 = PHI(%1118, %1138, %1152)
+				%1086 = PHI(%1064, %1078, #8e2c)
+				%1100 = PHI(#0)
 				%341 = MLOAD(#40)
 				%1022 = PHI(%717, %944)
 				%1020 = PHI(%717, %944)
+				%1019 = PHI(%717, %944)
 				%945 = PHI(%717, %944)
-				%1159 = PHI(%1118, %1138, %1152)
-				%1208 = PHI(%631, %1116)
-				%1086 = PHI(%1064, %1078, #8e2c)
-				%1100 = PHI(#0)
 				%1321 = PHI(%1182, %1296)
 				%1320 = PHI(%1086, %1159, %1319)
 				%1103 = PHI(#407, #41e)
+				%1238 = PHI(%1213, %1237)
 				%944 = PHI(%588, %717)
 				%588 = MLOAD(#40)
-				%1238 = PHI(%1213, %1237)
-				%579 = DIV(%1117, #10)
 				%1116 = PHI(#47fba, #a6f65)
+				%579 = DIV(%1117, #10)
 				%1461 = PHI(%1173, %1458)
-				%1152 = PHI(#0, %576)
 				%631 = DIV(%1208, #10)
+				%1152 = PHI(#0, %576)
 				%1078 = PHI(#402, #419)
 				%1319 = PHI(%1280, %1296, %1312)
 				%576 = ADD(#1, %1152)
@@ -1155,91 +117,91 @@ CALL/CALLCODE Instruction Detected:
 			Trace:
 				%309 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1508)
 				%1508 = PHI(%717, %1505)
-				%717 = MLOAD(#40)
 				%1505 = PHI(%1449, %1502)
+				%717 = MLOAD(#40)
 				%1502 = PHI(%1485, %1495)
 				%1449 = PHI(%1235, %1417, %1426, %1436)
-				%1485 = PHI(%1173, %1296, %1478, %1479)
 				%1495 = PHI(%1312, %1488)
-				%1235 = PHI(%1185, %1194, %1213)
+				%1485 = PHI(%1173, %1296, %1478, %1479)
 				%1426 = PHI(%9, %1237, %1396, %1420, #47fba)
+				%1235 = PHI(%1185, %1194, %1213)
 				%1436 = PHI(%1213, %1429)
 				%1417 = PHI(%1185, %1359, %1366, %1396)
-				%1173 = PHI(#60, %1064, %1165, %1167, #9891e)
-				%1296 = PHI(%1179, %1282, %1283)
-				%1479 = PHI(%1173, %1458)
-				%1478 = PHI(%1118, %1477)
-				%1312 = PHI(%1267, %1304)
 				%1488 = PHI(%1359, %1485)
-				%1213 = PHI(%1023, %1179, %1209)
-				%1185 = PHI(%1138, %1182)
-				%1194 = PHI(%961, %1187, #e21df)
-				%1420 = PHI(%1396, %1419)
+				%1312 = PHI(%1267, %1304)
+				%1479 = PHI(%1173, %1458)
+				%1173 = PHI(#60, %1064, %1165, %1167, #9891e)
+				%1478 = PHI(%1118, %1477)
+				%1296 = PHI(%1179, %1282, %1283)
 				%1237 = PHI(%1194, %1235)
 				%9 = SHR(#e0, %7)
 				%1396 = PHI(%1177, %1209, %1386, %1389)
+				%1420 = PHI(%1396, %1419)
+				%1185 = PHI(%1138, %1182)
+				%1213 = PHI(%1023, %1179, %1209)
+				%1194 = PHI(%961, %1187, #e21df)
 				%1429 = PHI(%1177, %1426)
-				%1359 = PHI(%1126, %1173, %1182, %1334)
 				%1366 = PHI(%912, %1187, %1361, #b120a)
+				%1359 = PHI(%1126, %1173, %1182, %1334)
+				%1304 = PHI(%1182, %1296)
+				%1267 = PHI(%1213, %1259)
+				%1458 = PHI(%1177, %1251, %1451, %1452)
 				%1064 = PHI(#60, %717, %1034, %1057)
 				%1167 = PHI(%1034, %1165)
 				%1165 = PHI(#60, %636, %717, %1118, %1164)
-				%1283 = PHI(%1179, %1251)
-				%1282 = PHI(%1064, %1162, %1280)
-				%1179 = PHI(%1064, %1177)
-				%1458 = PHI(%1177, %1251, %1451, %1452)
 				%1118 = PHI(%612, %1117)
 				%1477 = PHI(%1280, %1449, %1458, %1468)
-				%1304 = PHI(%1182, %1296)
-				%1267 = PHI(%1213, %1259)
-				%1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)
-				%1209 = PHI(%1159, %1194, %1208)
-				%1182 = PHI(%1086, %1173, %1179)
-				%1138 = PHI(%1086, %1100, %1126, #19bdb)
-				%1187 = PHI(%1138, %1185)
-				%961 = PHI(#177, #181)
-				%1419 = PHI(%1366, %1417)
+				%1283 = PHI(%1179, %1251)
+				%1179 = PHI(%1064, %1177)
+				%1282 = PHI(%1064, %1162, %1280)
 				%7 = CALLDATALOAD(#0)
+				%1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)
+				%1209 = PHI(%1159, %1194, %1208)
 				%1177 = PHI(%1034, %1173)
 				%1386 = PHI(#60, %1118, %1159, %1366)
-				%1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)
+				%1419 = PHI(%1366, %1417)
+				%1182 = PHI(%1086, %1173, %1179)
+				%1138 = PHI(%1086, %1100, %1126, #19bdb)
+				%1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)
+				%961 = PHI(#177, #181)
+				%1187 = PHI(%1138, %1185)
+				%1361 = PHI(%1126, %1359)
+				%912 = PHI(#312, #3ad)
 				%1334 = PHI(%1182, %1320, %1321)
 				%1126 = PHI(%1086, %1103, %1118, #636c5)
-				%912 = PHI(#312, #3ad)
-				%1361 = PHI(%1126, %1359)
+				%1259 = PHI(%1179, %1251)
+				%1451 = PHI(%1034, %1165, %1449)
+				%1452 = PHI(%1177, %1426)
+				%1251 = PHI(%945, %1213, %1238)
 				%1057 = PHI(%717, %944)
 				%1034 = PHI(#60, %1023, #474, #4ce)
-				%1164 = PHI(#60, %717, %1064, %1162, #548)
 				%636 = MLOAD(%588)
-				%1251 = PHI(%945, %1213, %1238)
-				%1280 = PHI(%1235, %1251, %1267)
-				%1162 = PHI(%588, %717, %1086, %1159)
-				%1452 = PHI(%1177, %1426)
-				%1451 = PHI(%1034, %1165, %1449)
+				%1164 = PHI(#60, %717, %1064, %1162, #548)
 				%612 = MOD(%1208, #10)
 				%1117 = PHI(%579, %1116)
+				%1280 = PHI(%1235, %1251, %1267)
 				%1468 = PHI(%1267, %1461)
-				%1259 = PHI(%1179, %1251)
-				%1019 = PHI(%717, %944)
+				%1162 = PHI(%588, %717, %1086, %1159)
+				%1208 = PHI(%631, %1116)
+				%1159 = PHI(%1118, %1138, %1152)
+				%1086 = PHI(%1064, %1078, #8e2c)
+				%1100 = PHI(#0)
 				%341 = MLOAD(#40)
 				%1022 = PHI(%717, %944)
 				%1020 = PHI(%717, %944)
+				%1019 = PHI(%717, %944)
 				%945 = PHI(%717, %944)
-				%1159 = PHI(%1118, %1138, %1152)
-				%1208 = PHI(%631, %1116)
-				%1086 = PHI(%1064, %1078, #8e2c)
-				%1100 = PHI(#0)
 				%1321 = PHI(%1182, %1296)
 				%1320 = PHI(%1086, %1159, %1319)
 				%1103 = PHI(#407, #41e)
+				%1238 = PHI(%1213, %1237)
 				%944 = PHI(%588, %717)
 				%588 = MLOAD(#40)
-				%1238 = PHI(%1213, %1237)
-				%579 = DIV(%1117, #10)
 				%1116 = PHI(#47fba, #a6f65)
+				%579 = DIV(%1117, #10)
 				%1461 = PHI(%1173, %1458)
-				%1152 = PHI(#0, %576)
 				%631 = DIV(%1208, #10)
+				%1152 = PHI(#0, %576)
 				%1078 = PHI(#402, #419)
 				%1319 = PHI(%1280, %1296, %1312)
 				%576 = ADD(#1, %1152)
@@ -1276,69 +238,114 @@ CALL/CALLCODE Instruction Detected:
 [+] Wrote PDG to output/pdg_0xdf.pdf
 [+] Wrote PDG to output/pdg_0x2bf.pdf
 [+] Wrote PDG to output/pdg_0x35a.pdf
-Collected 158 basic block sequences for training.
 [+] Wrote SDG to output/sdg.pdf
-[+] Wrote backtrack paths to output/"withdrawal()_CallBacktrack_0".pdf
-[+] Wrote backtrack paths to output/"withdrawal()_CallBacktrack_1".pdf
-Function: withdrawal():CallBacktrack_0
+[+] Wrote backtrack paths to output/"start()_CallBacktrack_0".pdf
+[+] Wrote backtrack paths to output/"start()_CallBacktrack_1".pdf
+--- Printing Function Embeddings and Adjacency Matrices ---
+Function: start():CallBacktrack_0
 Node Embeddings:
-  Block 0x84d: [ 0.00172244 -0.00079041  0.00228128  0.00100943 -0.00077033]...
-  Block 0x474: [-0.00101655  0.00055276 -0.0023295  -0.00166552 -0.00259178]...
-  Block 0x4fc: [-0.00067452  0.0025869  -0.00445931 -0.00086943 -0.00256261]...
-  Block 0x423: [ 0.00175121  0.00111282 -0.00059483 -0.00082103 -0.00094529]...
-  Block 0x805: [ 0.00014924  0.00045075  0.00094893 -0.00240423 -0.00047403]...
-  Block 0xa11: [-0.00028365  0.00224404  0.00089038  0.00524353  0.00012108]...
-  Block 0x4de: [-0.00067452  0.0025869  -0.00445931 -0.00086943 -0.00256261]...
-  Block 0x812: [ 0.00131576 -0.0048853  -0.00037099  0.00502238 -0.00573743]...
-  Block 0x51a: [-0.00067452  0.0025869  -0.00445931 -0.00086943 -0.00256261]...
-  Block 0x312: [ 1.6374338e-03  3.7144549e-04  2.2818714e-03  7.8961905e-04
- -3.9086677e-05]...
-  Block 0x4ce: [ 3.9446270e-05 -5.8462014e-05 -2.2061507e-03 -3.8547043e-03
- -1.2583104e-03]...
-  Block 0x8ff: [ 4.8233164e-03 -1.6470319e-03 -2.9297138e-05  2.1380282e-03
- -1.5471801e-03]...
+  Block 0x812: [-0.00400869  0.00423937  0.00339097  0.00672688 -0.00497397]...
+  Block 0x474: [ 0.00051484  0.00053297  0.00483532  0.00936958 -0.00880426]...
+  Block 0x8ff: [-0.00613198  0.00554803 -0.00101415 -0.00074015 -0.00062845]...
+  Block 0x4ce: [ 0.00068382  0.00043258  0.0047078   0.00919122 -0.00861482]...
+  Block 0x84d: [-0.0040371   0.00262149  0.00015573  0.00180048  0.00333136]...
+  Block 0x312: [-0.00059711  0.00265679  0.00012987  0.00244891 -0.00141903]...
+  Block 0x4fc: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
+  Block 0x423: [-0.00342838  0.00178093  0.00145203  0.00430704 -0.00272766]...
+  Block 0x805: [-0.00024556  0.00098471  0.00540913  0.0101722  -0.00965671]...
+  Block 0x4de: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
+  Block 0x51a: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
 Adjacency Matrix:
-[[192.   0.   0.   0.   0.  60.   0.  36.   0.   0.   0.  12.]
- [  0.   0.   0.   0. 132.  60.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0.   0.  12.  60.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0. 120.  72.  60.   0.   0.   0.   0.   0.   0.]
- [  0. 132.  12.  72.  96.  60.  12.  12.  12.   0.  96.   0.]
- [ 60.  60.  60.  60.  60. 168.  60.  60.  60.  60.  60.  72.]
- [  0.   0.   0.   0.  12.  60.   0.   0.   0.   0.   0.   0.]
- [ 36.   0.   0.   0.  12.  60.   0.  48.   0.   0.   0.   0.]
- [  0.   0.   0.   0.  12.  60.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0.   0.   0.  60.   0.   0.   0. 336.   0.   0.]
- [  0.   0.   0.   0.  96.  60.   0.   0.   0.   0.   0.   0.]
- [ 12.   0.   0.   0.   0.  72.   0.   0.   0.   0.   0.  72.]]
-Function: withdrawal():CallBacktrack_1
+  Edge Index (2, E):
+[[ 2  2  2  2  2  2  2  2  2  2  2  5  7  1  3  7 10  6  9  8  8  0  4  0
+   4  2]
+ [ 5  7  1  3  9  6 10  8  0  4  2  5  7  8  8  8  8  8  8  8  0  0  4  4
+   2  2]]
+  Edge Types (E):
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+--------------------------------------------------
+Function: start():CallBacktrack_1
 Node Embeddings:
-  Block 0x84d: [ 0.00172244 -0.00079041  0.00228128  0.00100943 -0.00077033]...
-  Block 0x474: [-0.00101655  0.00055276 -0.0023295  -0.00166552 -0.00259178]...
-  Block 0x4fc: [-0.00067452  0.0025869  -0.00445931 -0.00086943 -0.00256261]...
-  Block 0x423: [ 0.00175121  0.00111282 -0.00059483 -0.00082103 -0.00094529]...
-  Block 0x805: [ 0.00014924  0.00045075  0.00094893 -0.00240423 -0.00047403]...
-  Block 0xa11: [-0.00028365  0.00224404  0.00089038  0.00524353  0.00012108]...
-  Block 0x4de: [-0.00067452  0.0025869  -0.00445931 -0.00086943 -0.00256261]...
-  Block 0x3ad: [ 0.0006188  -0.00131004  0.00051805 -0.00079171 -0.00098114]...
-  Block 0x51a: [-0.00067452  0.0025869  -0.00445931 -0.00086943 -0.00256261]...
-  Block 0x312: [ 1.6374338e-03  3.7144549e-04  2.2818714e-03  7.8961905e-04
- -3.9086677e-05]...
-  Block 0x812: [ 0.00131576 -0.0048853  -0.00037099  0.00502238 -0.00573743]...
-  Block 0x4ce: [ 3.9446270e-05 -5.8462014e-05 -2.2061507e-03 -3.8547043e-03
- -1.2583104e-03]...
-  Block 0x8ff: [ 4.8233164e-03 -1.6470319e-03 -2.9297138e-05  2.1380282e-03
- -1.5471801e-03]...
+  Block 0x812: [-0.00400869  0.00423937  0.00339097  0.00672688 -0.00497397]...
+  Block 0x474: [ 0.00051484  0.00053297  0.00483532  0.00936958 -0.00880426]...
+  Block 0x8ff: [-0.00613198  0.00554803 -0.00101415 -0.00074015 -0.00062845]...
+  Block 0x4ce: [ 0.00068382  0.00043258  0.0047078   0.00919122 -0.00861482]...
+  Block 0x84d: [-0.0040371   0.00262149  0.00015573  0.00180048  0.00333136]...
+  Block 0x312: [-0.00059711  0.00265679  0.00012987  0.00244891 -0.00141903]...
+  Block 0x4fc: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
+  Block 0x423: [-0.00342838  0.00178093  0.00145203  0.00430704 -0.00272766]...
+  Block 0x805: [-0.00024556  0.00098471  0.00540913  0.0101722  -0.00965671]...
+  Block 0x51a: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
+  Block 0x4de: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
+  Block 0x3ad: [-0.00062415  0.00278541 -0.00027623  0.00185481 -0.00078536]...
 Adjacency Matrix:
-[[208.   0.   0.   0.   0.  65.   0.   0.   0.   0.  39.   0.  13.]
- [  0.   0.   0.   0. 143.  65.   0.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0.   0.  13.  65.   0.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0. 130.  78.  65.   0.   0.   0.   0.   0.   0.   0.]
- [  0. 143.  13.  78. 104.  65.  13.   0.  13.   0.  13. 104.   0.]
- [ 65.  65.  65.  65.  65. 182.  65.  65.  65.  65.  65.  65.  78.]
- [  0.   0.   0.   0.  13.  65.   0.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0.   0.   0.  65.   0. 364.   0.  13.   0.   0.   0.]
- [  0.   0.   0.   0.  13.  65.   0.   0.   0.   0.   0.   0.   0.]
- [  0.   0.   0.   0.   0.  65.   0.  13.   0. 364.   0.   0.   0.]
- [ 39.   0.   0.   0.  13.  65.   0.   0.   0.   0.  52.   0.   0.]
- [  0.   0.   0.   0. 104.  65.   0.   0.   0.   0.   0.   0.   0.]
- [ 13.   0.   0.   0.   0.  78.   0.   0.   0.   0.   0.   0.  78.]]
+  Edge Index (2, E):
+[[ 2  2  2  2  2  2  2  2  2  2  2  2  5  5 11  7  1  3  7  9  6 10  8  8
+   0  4  0  4  2]
+ [ 5 11  7  1  3 10  6  9  8  0  4  2  5 11 11  7  8  8  8  8  8  8  8  0
+   0  4  4  2  2]]
+  Edge Types (E):
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+--------------------------------------------------
+--- Printing Function Embeddings and Adjacency Matrices ---
+Graph 0
+  Node Features Shape: torch.Size([11, 100])
+  Edge Index Shape: torch.Size([2, 26])
+  Edge Types Shape: torch.Size([26])
+--------------------------------------------------
+Graph 1
+  Node Features Shape: torch.Size([12, 100])
+  Edge Index Shape: torch.Size([2, 29])
+  Edge Types Shape: torch.Size([29])
+--------------------------------------------------
+Epoch 1/50, Loss: 0.0002
+Epoch 2/50, Loss: 0.0005
+Epoch 3/50, Loss: 0.0002
+Epoch 4/50, Loss: 0.0001
+Epoch 5/50, Loss: 0.0001
+Epoch 6/50, Loss: 0.0001
+Epoch 7/50, Loss: 0.0000
+Epoch 8/50, Loss: 0.0000
+Epoch 9/50, Loss: 0.0000
+Epoch 10/50, Loss: 0.0000
+Epoch 11/50, Loss: 0.0000
+Epoch 12/50, Loss: 0.0000
+Epoch 13/50, Loss: 0.0000
+Epoch 14/50, Loss: 0.0000
+Epoch 15/50, Loss: 0.0000
+Epoch 16/50, Loss: 0.0000
+Epoch 17/50, Loss: 0.0000
+Epoch 18/50, Loss: 0.0000
+Epoch 19/50, Loss: 0.0000
+Epoch 20/50, Loss: 0.0000
+Epoch 21/50, Loss: 0.0000
+Epoch 22/50, Loss: 0.0000
+Epoch 23/50, Loss: 0.0000
+Epoch 24/50, Loss: 0.0000
+Epoch 25/50, Loss: 0.0000
+Epoch 26/50, Loss: 0.0000
+Epoch 27/50, Loss: 0.0000
+Epoch 28/50, Loss: 0.0000
+Epoch 29/50, Loss: 0.0000
+Epoch 30/50, Loss: 0.0000
+Epoch 31/50, Loss: 0.0000
+Epoch 32/50, Loss: 0.0000
+Epoch 33/50, Loss: 0.0000
+Epoch 34/50, Loss: 0.0000
+Epoch 35/50, Loss: 0.0000
+Epoch 36/50, Loss: 0.0000
+Epoch 37/50, Loss: 0.0000
+Epoch 38/50, Loss: 0.0000
+Epoch 39/50, Loss: 0.0000
+Epoch 40/50, Loss: 0.0000
+Epoch 41/50, Loss: 0.0000
+Epoch 42/50, Loss: 0.0000
+Epoch 43/50, Loss: 0.0000
+Epoch 44/50, Loss: 0.0000
+Epoch 45/50, Loss: 0.0000
+Epoch 46/50, Loss: 0.0000
+Epoch 47/50, Loss: 0.0000
+Epoch 48/50, Loss: 0.0000
+Epoch 49/50, Loss: 0.0000
+Epoch 50/50, Loss: 0.0000
+Training complete!
