@@ -142,7 +142,7 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
                     print(f'\t\t\tTrace:')
                     for t in trace:
                         print(f'\t\t\t\t{t}')
-                    analyze_saved_traces(address_source,all_instructions_by_variable) # 分析保存的路径 
+                    # analyze_saved_traces(address_source,all_instructions_by_variable) # 分析保存的路径 
 
                     try:
                         if value.writer:

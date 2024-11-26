@@ -199,7 +199,12 @@ class InternalRecover(object):
             terminator: SSAInstruction = block.insns[-1]
 
             if terminator.insn.name == "JUMPI" or not terminator.insn.is_terminator:
-                block.set_fallthrough_target(terminator.offset + terminator.insn.size)
+                fallthrough_offset = terminator.offset + terminator.insn.size
+                if fallthrough_offset in function.blockmap:
+                    block.set_fallthrough_target(fallthrough_offset)
+                else:
+                    logger.warning(f"Fallthrough target {fallthrough_offset:#x} not found in blockmap")
+                # block.set_fallthrough_target(terminator.offset + terminator.insn.size)
 
     def repopulate_blocks(self, function: SSAFunction) -> None:
         for block in function:

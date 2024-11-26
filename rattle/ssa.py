@@ -724,11 +724,9 @@ class SSAFunction(object):
                 if insn.insn.name == 'SELFDESTRUCT':
                     insns_that_send.append(insn)
                     rv = True
-                elif insn.insn.name in ('CALL', 'CALLCODE'): 
+                elif insn.insn.name in ('CALL', 'CALLCODE'):
                     gas, to, value, in_offset, in_size, out_offset, out_size = insn.arguments
-                    # 打印 CALL 或 CALLCODE 的所有参数
-                    print(f"CALL/CALLCODE Instruction Detected:")
-                    print(f"  Arguments: {insn.arguments}")  # 直接打印所有参数
+
                     if not isinstance(value, ConcreteStackValue):
                         insns_that_send.append(insn)
                         rv = True
@@ -823,5 +821,3 @@ class ConditionalInternalCall(SSAInstruction):
         rv += ")"
 
         return rv
-    
-

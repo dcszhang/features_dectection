@@ -1,351 +1,117 @@
-WARNING:rattle.recover:Found CALLDATALOAD(0) user that isn't an EQ %1426 = PHI(%9, %1237, %1396, %1420, #47fba)
+WARNING:rattle.recover:Fallthrough target 0x806 not found in blockmap
 Identified Functions:
 	Function: _dispatch starts at offset 0, argument offsets: []
 	Function: _fallthrough starts at offset 13, argument offsets: [(0, 32)]
-	Function: tokenName() starts at offset 79, argument offsets: []
-	Function: tokenSymbol() starts at offset 223, argument offsets: []
-	Function: start() starts at offset 703, argument offsets: []
-	Function: withdrawal() starts at offset 858, argument offsets: []
+	Function: queryBalance() starts at offset 186, argument offsets: []
+	Function: tokenName() starts at offset 229, argument offsets: []
+	Function: tokenSymbol() starts at offset 373, argument offsets: []
+	Function: owner() starts at offset 517, argument offsets: []
+	Function: withdrawal() starts at offset 582, argument offsets: []
+	Function: start(address) starts at offset 605, argument offsets: [(4, 36)]
 
-Storage Locations: [0, 1]
-CALL/CALLCODE Instruction Detected:
-  Arguments: [%275, %271, %273, %280, %281, %280, #0]
-CALL/CALLCODE Instruction Detected:
-  Arguments: [%313, %309, %311, %318, %319, %318, #0]
+Storage Locations: [0, 1, 2]
 [+] Contract can send ether from following functions:
-	- start()
-		%282 = CALL(%275, %271, %273, %280, %281, %280, #0)
-			To:	%271 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1506)
+	- start(address)
+		%490 = CALL(%483, %479, %481, %488, %489, %488, #0)
+			To:	%479 = AND(#ffffffffffffffffffffffffffffffffffffffff, %186)
 			Trace:
-				%271 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1506)
-				%1506 = PHI(%717, %1505)
-				%1505 = PHI(%1449, %1502)
-				%717 = MLOAD(#40)
-				%1502 = PHI(%1485, %1495)
-				%1449 = PHI(%1235, %1417, %1426, %1436)
-				%1495 = PHI(%1312, %1488)
-				%1485 = PHI(%1173, %1296, %1478, %1479)
-				%1426 = PHI(%9, %1237, %1396, %1420, #47fba)
-				%1235 = PHI(%1185, %1194, %1213)
-				%1436 = PHI(%1213, %1429)
-				%1417 = PHI(%1185, %1359, %1366, %1396)
-				%1488 = PHI(%1359, %1485)
-				%1312 = PHI(%1267, %1304)
-				%1479 = PHI(%1173, %1458)
-				%1173 = PHI(#60, %1064, %1165, %1167, #9891e)
-				%1478 = PHI(%1118, %1477)
-				%1296 = PHI(%1179, %1282, %1283)
-				%1237 = PHI(%1194, %1235)
-				%9 = SHR(#e0, %7)
-				%1396 = PHI(%1177, %1209, %1386, %1389)
-				%1420 = PHI(%1396, %1419)
-				%1185 = PHI(%1138, %1182)
-				%1213 = PHI(%1023, %1179, %1209)
-				%1194 = PHI(%961, %1187, #e21df)
-				%1429 = PHI(%1177, %1426)
-				%1366 = PHI(%912, %1187, %1361, #b120a)
-				%1359 = PHI(%1126, %1173, %1182, %1334)
-				%1304 = PHI(%1182, %1296)
-				%1267 = PHI(%1213, %1259)
-				%1458 = PHI(%1177, %1251, %1451, %1452)
-				%1064 = PHI(#60, %717, %1034, %1057)
-				%1167 = PHI(%1034, %1165)
-				%1165 = PHI(#60, %636, %717, %1118, %1164)
-				%1118 = PHI(%612, %1117)
-				%1477 = PHI(%1280, %1449, %1458, %1468)
-				%1283 = PHI(%1179, %1251)
-				%1179 = PHI(%1064, %1177)
-				%1282 = PHI(%1064, %1162, %1280)
-				%7 = CALLDATALOAD(#0)
-				%1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)
-				%1209 = PHI(%1159, %1194, %1208)
-				%1177 = PHI(%1034, %1173)
-				%1386 = PHI(#60, %1118, %1159, %1366)
-				%1419 = PHI(%1366, %1417)
-				%1182 = PHI(%1086, %1173, %1179)
-				%1138 = PHI(%1086, %1100, %1126, #19bdb)
-				%1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)
-				%961 = PHI(#177, #181)
-				%1187 = PHI(%1138, %1185)
-				%1361 = PHI(%1126, %1359)
-				%912 = PHI(#312, #3ad)
-				%1334 = PHI(%1182, %1320, %1321)
-				%1126 = PHI(%1086, %1103, %1118, #636c5)
-				%1259 = PHI(%1179, %1251)
-				%1451 = PHI(%1034, %1165, %1449)
-				%1452 = PHI(%1177, %1426)
-				%1251 = PHI(%945, %1213, %1238)
-				%1057 = PHI(%717, %944)
-				%1034 = PHI(#60, %1023, #474, #4ce)
-				%636 = MLOAD(%588)
-				%1164 = PHI(#60, %717, %1064, %1162, #548)
-				%612 = MOD(%1208, #10)
-				%1117 = PHI(%579, %1116)
-				%1280 = PHI(%1235, %1251, %1267)
-				%1468 = PHI(%1267, %1461)
-				%1162 = PHI(%588, %717, %1086, %1159)
-				%1208 = PHI(%631, %1116)
-				%1159 = PHI(%1118, %1138, %1152)
-				%1086 = PHI(%1064, %1078, #8e2c)
-				%1100 = PHI(#0)
-				%341 = MLOAD(#40)
-				%1022 = PHI(%717, %944)
-				%1020 = PHI(%717, %944)
-				%1019 = PHI(%717, %944)
-				%945 = PHI(%717, %944)
-				%1321 = PHI(%1182, %1296)
-				%1320 = PHI(%1086, %1159, %1319)
-				%1103 = PHI(#407, #41e)
-				%1238 = PHI(%1213, %1237)
-				%944 = PHI(%588, %717)
-				%588 = MLOAD(#40)
-				%1116 = PHI(#47fba, #a6f65)
-				%579 = DIV(%1117, #10)
-				%1461 = PHI(%1173, %1458)
-				%631 = DIV(%1208, #10)
-				%1152 = PHI(#0, %576)
-				%1078 = PHI(#402, #419)
-				%1319 = PHI(%1280, %1296, %1312)
-				%576 = ADD(#1, %1152)
-			Analyzing trace for variable: %271
-				Tree height for variable %271: 11
-			[+] Trace for variable %271 matches the first feature (complex address generation)
-			Value:	%273 = SELFBALANCE()
+				%479 = AND(#ffffffffffffffffffffffffffffffffffffffff, %186)
+				%186 = AND(#ffffffffffffffffffffffffffffffffffffffff, %184)
+				%184 = CALLDATALOAD(#4)
+			Value:	%481 = CALLVALUE()
 
-		%320 = CALL(%313, %309, %311, %318, %319, %318, #0)
-			To:	%309 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1508)
+	- withdrawal()
+		%401 = CALL(%394, %391, %361, %399, %400, %399, #0)
+			To:	%391 = AND(#ffffffffffffffffffffffffffffffffffffffff, %389)
 			Trace:
-				%309 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1508)
-				%1508 = PHI(%717, %1505)
-				%1505 = PHI(%1449, %1502)
-				%717 = MLOAD(#40)
-				%1502 = PHI(%1485, %1495)
-				%1449 = PHI(%1235, %1417, %1426, %1436)
-				%1495 = PHI(%1312, %1488)
-				%1485 = PHI(%1173, %1296, %1478, %1479)
-				%1426 = PHI(%9, %1237, %1396, %1420, #47fba)
-				%1235 = PHI(%1185, %1194, %1213)
-				%1436 = PHI(%1213, %1429)
-				%1417 = PHI(%1185, %1359, %1366, %1396)
-				%1488 = PHI(%1359, %1485)
-				%1312 = PHI(%1267, %1304)
-				%1479 = PHI(%1173, %1458)
-				%1173 = PHI(#60, %1064, %1165, %1167, #9891e)
-				%1478 = PHI(%1118, %1477)
-				%1296 = PHI(%1179, %1282, %1283)
-				%1237 = PHI(%1194, %1235)
-				%9 = SHR(#e0, %7)
-				%1396 = PHI(%1177, %1209, %1386, %1389)
-				%1420 = PHI(%1396, %1419)
-				%1185 = PHI(%1138, %1182)
-				%1213 = PHI(%1023, %1179, %1209)
-				%1194 = PHI(%961, %1187, #e21df)
-				%1429 = PHI(%1177, %1426)
-				%1366 = PHI(%912, %1187, %1361, #b120a)
-				%1359 = PHI(%1126, %1173, %1182, %1334)
-				%1304 = PHI(%1182, %1296)
-				%1267 = PHI(%1213, %1259)
-				%1458 = PHI(%1177, %1251, %1451, %1452)
-				%1064 = PHI(#60, %717, %1034, %1057)
-				%1167 = PHI(%1034, %1165)
-				%1165 = PHI(#60, %636, %717, %1118, %1164)
-				%1118 = PHI(%612, %1117)
-				%1477 = PHI(%1280, %1449, %1458, %1468)
-				%1283 = PHI(%1179, %1251)
-				%1179 = PHI(%1064, %1177)
-				%1282 = PHI(%1064, %1162, %1280)
-				%7 = CALLDATALOAD(#0)
-				%1389 = PHI(#46f, #4c9, #4de, #4e7, #4fc, #505, #51a, #523)
-				%1209 = PHI(%1159, %1194, %1208)
-				%1177 = PHI(%1034, %1173)
-				%1386 = PHI(#60, %1118, %1159, %1366)
-				%1419 = PHI(%1366, %1417)
-				%1182 = PHI(%1086, %1173, %1179)
-				%1138 = PHI(%1086, %1100, %1126, #19bdb)
-				%1023 = PHI(%341, %945, %1019, %1020, %1022, #4ec, #50a, #528)
-				%961 = PHI(#177, #181)
-				%1187 = PHI(%1138, %1185)
-				%1361 = PHI(%1126, %1359)
-				%912 = PHI(#312, #3ad)
-				%1334 = PHI(%1182, %1320, %1321)
-				%1126 = PHI(%1086, %1103, %1118, #636c5)
-				%1259 = PHI(%1179, %1251)
-				%1451 = PHI(%1034, %1165, %1449)
-				%1452 = PHI(%1177, %1426)
-				%1251 = PHI(%945, %1213, %1238)
-				%1057 = PHI(%717, %944)
-				%1034 = PHI(#60, %1023, #474, #4ce)
-				%636 = MLOAD(%588)
-				%1164 = PHI(#60, %717, %1064, %1162, #548)
-				%612 = MOD(%1208, #10)
-				%1117 = PHI(%579, %1116)
-				%1280 = PHI(%1235, %1251, %1267)
-				%1468 = PHI(%1267, %1461)
-				%1162 = PHI(%588, %717, %1086, %1159)
-				%1208 = PHI(%631, %1116)
-				%1159 = PHI(%1118, %1138, %1152)
-				%1086 = PHI(%1064, %1078, #8e2c)
-				%1100 = PHI(#0)
-				%341 = MLOAD(#40)
-				%1022 = PHI(%717, %944)
-				%1020 = PHI(%717, %944)
-				%1019 = PHI(%717, %944)
-				%945 = PHI(%717, %944)
-				%1321 = PHI(%1182, %1296)
-				%1320 = PHI(%1086, %1159, %1319)
-				%1103 = PHI(#407, #41e)
-				%1238 = PHI(%1213, %1237)
-				%944 = PHI(%588, %717)
-				%588 = MLOAD(#40)
-				%1116 = PHI(#47fba, #a6f65)
-				%579 = DIV(%1117, #10)
-				%1461 = PHI(%1173, %1458)
-				%631 = DIV(%1208, #10)
-				%1152 = PHI(#0, %576)
-				%1078 = PHI(#402, #419)
-				%1319 = PHI(%1280, %1296, %1312)
-				%576 = ADD(#1, %1152)
-			Analyzing trace for variable: %271
-				Tree height for variable %271: 11
-			[+] Trace for variable %271 matches the first feature (complex address generation)
-			Analyzing trace for variable: %309
-				Tree height for variable %309: 11
-			[+] Trace for variable %309 matches the first feature (complex address generation)
-			Value:	%311 = SELFBALANCE()
+				%391 = AND(#ffffffffffffffffffffffffffffffffffffffff, %389)
+				%389 = AND(#ffffffffffffffffffffffffffffffffffffffff, %387)
+				%387 = DIV(%384, %386)
+				%384 = SLOAD(#2)
+				%386 = EXP(#100, #0)
+			Value:	%361 = SELFBALANCE()
 
 [+] Contract calls:
-	%282 = CALL(%275, %271, %273, %280, %281, %280, #0)
-		Gas: %275			%275 = MUL(%274, #8fc)
-		To: %271 			%271 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1506)
-		Value: %273			%273 = SELFBALANCE()
-		In Data Offset: %280		%280 = MLOAD(#40)
-		In Data Size: %281		%281 = SUB(%277, %280)
-		Out Data Offset: %280		%280 = MLOAD(#40)
+	%490 = CALL(%483, %479, %481, %488, %489, %488, #0)
+		Gas: %483			%483 = MUL(%482, #8fc)
+		To: %479 			%479 = AND(#ffffffffffffffffffffffffffffffffffffffff, %186)
+		Value: %481			%481 = CALLVALUE()
+		In Data Offset: %488		%488 = MLOAD(#40)
+		In Data Size: %489		%489 = SUB(%485, %488)
+		Out Data Offset: %488		%488 = MLOAD(#40)
 		Out Data Size: #0
 
-	%320 = CALL(%313, %309, %311, %318, %319, %318, #0)
-		Gas: %313			%313 = MUL(%312, #8fc)
-		To: %309 			%309 = AND(#ffffffffffffffffffffffffffffffffffffffff, %1508)
-		Value: %311			%311 = SELFBALANCE()
-		In Data Offset: %318		%318 = MLOAD(#40)
-		In Data Size: %319		%319 = SUB(%315, %318)
-		Out Data Offset: %318		%318 = MLOAD(#40)
+	%401 = CALL(%394, %391, %361, %399, %400, %399, #0)
+		Gas: %394			%394 = MUL(%393, #8fc)
+		To: %391 			%391 = AND(#ffffffffffffffffffffffffffffffffffffffff, %389)
+		Value: %361			%361 = SELFBALANCE()
+		In Data Offset: %399		%399 = MLOAD(#40)
+		In Data Size: %400		%400 = SUB(%396, %399)
+		Out Data Offset: %399		%399 = MLOAD(#40)
 		Out Data Size: #0
 
 [+] Wrote PDG to output/pdg_0x0.pdf
 [+] Wrote PDG to output/pdg_0xd.pdf
-[+] Wrote PDG to output/pdg_0x4f.pdf
-[+] Wrote PDG to output/pdg_0xdf.pdf
-[+] Wrote PDG to output/pdg_0x2bf.pdf
-[+] Wrote PDG to output/pdg_0x35a.pdf
+[+] Wrote PDG to output/pdg_0xba.pdf
+[+] Wrote PDG to output/pdg_0xe5.pdf
+[+] Wrote PDG to output/pdg_0x175.pdf
+[+] Wrote PDG to output/pdg_0x205.pdf
+[+] Wrote PDG to output/pdg_0x246.pdf
+[+] Wrote PDG to output/pdg_0x25d.pdf
+Collected 69 basic block sequences for training.
+Vocabulary size: 35
+Vector size: 64
+Sample words: ['ADD', 'MSTORE', 'MLOAD', 'SUB', 'AND', 'JUMPI', 'ISZERO', 'DIV', 'SLOAD', 'JUMP']
 [+] Wrote SDG to output/sdg.pdf
-[+] Wrote backtrack paths to output/"start()_CallBacktrack_0".pdf
-[+] Wrote backtrack paths to output/"start()_CallBacktrack_1".pdf
+[+] Wrote backtrack paths to output/"withdrawal()_CallBacktrack_0".pdf
+[+] Wrote backtrack paths to output/"start(address)_CallBacktrack_0".pdf
 --- Printing Function Embeddings and Adjacency Matrices ---
-Function: start():CallBacktrack_0
+Function: withdrawal():CallBacktrack_0
 Node Embeddings:
-  Block 0x812: [-0.00400869  0.00423937  0.00339097  0.00672688 -0.00497397]...
-  Block 0x474: [ 0.00051484  0.00053297  0.00483532  0.00936958 -0.00880426]...
-  Block 0x8ff: [-0.00613198  0.00554803 -0.00101415 -0.00074015 -0.00062845]...
-  Block 0x4ce: [ 0.00068382  0.00043258  0.0047078   0.00919122 -0.00861482]...
-  Block 0x84d: [-0.0040371   0.00262149  0.00015573  0.00180048  0.00333136]...
-  Block 0x312: [-0.00059711  0.00265679  0.00012987  0.00244891 -0.00141903]...
-  Block 0x4fc: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
-  Block 0x423: [-0.00342838  0.00178093  0.00145203  0.00430704 -0.00272766]...
-  Block 0x805: [-0.00024556  0.00098471  0.00540913  0.0101722  -0.00965671]...
-  Block 0x4de: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
-  Block 0x51a: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
+  Block 0x52c: [-0.00047653 -0.00255694  0.00574727  0.00114984 -0.00159538]...
+  Block 0x4b0: [ 0.00359963 -0.00467282  0.01110704  0.00501156 -0.00637331]...
 Adjacency Matrix:
   Edge Index (2, E):
-[[ 2  2  2  2  2  2  2  2  2  2  2  5  7  1  3  7 10  6  9  8  8  0  4  0
-   4  2]
- [ 5  7  1  3  9  6 10  8  0  4  2  5  7  8  8  8  8  8  8  8  0  0  4  4
-   2  2]]
+[[1 1 1 0 1]
+ [1 0 1 0 0]]
   Edge Types (E):
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 1, 1, 1]
 --------------------------------------------------
-Function: start():CallBacktrack_1
+Function: start(address):CallBacktrack_0
 Node Embeddings:
-  Block 0x812: [-0.00400869  0.00423937  0.00339097  0.00672688 -0.00497397]...
-  Block 0x474: [ 0.00051484  0.00053297  0.00483532  0.00936958 -0.00880426]...
-  Block 0x8ff: [-0.00613198  0.00554803 -0.00101415 -0.00074015 -0.00062845]...
-  Block 0x4ce: [ 0.00068382  0.00043258  0.0047078   0.00919122 -0.00861482]...
-  Block 0x84d: [-0.0040371   0.00262149  0.00015573  0.00180048  0.00333136]...
-  Block 0x312: [-0.00059711  0.00265679  0.00012987  0.00244891 -0.00141903]...
-  Block 0x4fc: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
-  Block 0x423: [-0.00342838  0.00178093  0.00145203  0.00430704 -0.00272766]...
-  Block 0x805: [-0.00024556  0.00098471  0.00540913  0.0101722  -0.00965671]...
-  Block 0x51a: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
-  Block 0x4de: [ 0.00393667 -0.00149988  0.00225316  0.00575778 -0.00496822]...
-  Block 0x3ad: [-0.00062415  0.00278541 -0.00027623  0.00185481 -0.00078536]...
+  Block 0x6ff: [-0.00080023  0.00018577  0.00919029  0.00150308 -0.0040067 ]...
+  Block 0x25d: [ 0.00349108 -0.00599026  0.01029575  0.00645357 -0.00057955]...
+  Block 0x273: [-0.00311086  0.00077665  0.00113284  0.00953054 -0.00051102]...
 Adjacency Matrix:
   Edge Index (2, E):
-[[ 2  2  2  2  2  2  2  2  2  2  2  2  5  5 11  7  1  3  7  9  6 10  8  8
-   0  4  0  4  2]
- [ 5 11  7  1  3 10  6  9  8  0  4  2  5 11 11  7  8  8  8  8  8  8  8  0
-   0  4  4  2  2]]
+[[1 1 2 1 1 2 2 0]
+ [1 2 0 1 2 2 0 0]]
   Edge Types (E):
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[0, 0, 0, 1, 1, 1, 1, 1]
 --------------------------------------------------
 --- Printing Function Embeddings and Adjacency Matrices ---
 Graph 0
-  Node Features Shape: torch.Size([11, 100])
-  Edge Index Shape: torch.Size([2, 26])
-  Edge Types Shape: torch.Size([26])
+  Node Features Shape: torch.Size([2, 64])
+  Edge Index Shape: torch.Size([2, 5])
+  Edge Types Shape: torch.Size([5])
 --------------------------------------------------
 Graph 1
-  Node Features Shape: torch.Size([12, 100])
-  Edge Index Shape: torch.Size([2, 29])
-  Edge Types Shape: torch.Size([29])
+  Node Features Shape: torch.Size([3, 64])
+  Edge Index Shape: torch.Size([2, 8])
+  Edge Types Shape: torch.Size([8])
 --------------------------------------------------
-Epoch 1/50, Loss: 0.0002
-Epoch 2/50, Loss: 0.0005
-Epoch 3/50, Loss: 0.0002
-Epoch 4/50, Loss: 0.0001
-Epoch 5/50, Loss: 0.0001
-Epoch 6/50, Loss: 0.0001
-Epoch 7/50, Loss: 0.0000
-Epoch 8/50, Loss: 0.0000
-Epoch 9/50, Loss: 0.0000
-Epoch 10/50, Loss: 0.0000
-Epoch 11/50, Loss: 0.0000
-Epoch 12/50, Loss: 0.0000
-Epoch 13/50, Loss: 0.0000
-Epoch 14/50, Loss: 0.0000
-Epoch 15/50, Loss: 0.0000
-Epoch 16/50, Loss: 0.0000
-Epoch 17/50, Loss: 0.0000
-Epoch 18/50, Loss: 0.0000
-Epoch 19/50, Loss: 0.0000
-Epoch 20/50, Loss: 0.0000
-Epoch 21/50, Loss: 0.0000
-Epoch 22/50, Loss: 0.0000
-Epoch 23/50, Loss: 0.0000
-Epoch 24/50, Loss: 0.0000
-Epoch 25/50, Loss: 0.0000
-Epoch 26/50, Loss: 0.0000
-Epoch 27/50, Loss: 0.0000
-Epoch 28/50, Loss: 0.0000
-Epoch 29/50, Loss: 0.0000
-Epoch 30/50, Loss: 0.0000
-Epoch 31/50, Loss: 0.0000
-Epoch 32/50, Loss: 0.0000
-Epoch 33/50, Loss: 0.0000
-Epoch 34/50, Loss: 0.0000
-Epoch 35/50, Loss: 0.0000
-Epoch 36/50, Loss: 0.0000
-Epoch 37/50, Loss: 0.0000
-Epoch 38/50, Loss: 0.0000
-Epoch 39/50, Loss: 0.0000
-Epoch 40/50, Loss: 0.0000
-Epoch 41/50, Loss: 0.0000
-Epoch 42/50, Loss: 0.0000
-Epoch 43/50, Loss: 0.0000
-Epoch 44/50, Loss: 0.0000
-Epoch 45/50, Loss: 0.0000
-Epoch 46/50, Loss: 0.0000
-Epoch 47/50, Loss: 0.0000
-Epoch 48/50, Loss: 0.0000
-Epoch 49/50, Loss: 0.0000
-Epoch 50/50, Loss: 0.0000
-Training complete!
+Graph Embeddings Shape: torch.Size([2, 32])
+Graph Embeddings: tensor([[-0.0224, -0.0887,  0.0510,  0.0067,  0.0397, -0.0244, -0.1258,  0.1201,
+          0.1662, -0.0481, -0.1028, -0.1204,  0.0514, -0.0128, -0.2968, -0.0507,
+         -0.1359, -0.0863,  0.1535,  0.0332, -0.0363, -0.0061, -0.0738,  0.1811,
+         -0.0296,  0.0374, -0.0578, -0.1339,  0.0020, -0.0676, -0.0806,  0.0249],
+        [ 0.0219, -0.1034,  0.0376, -0.0607,  0.0272, -0.0477, -0.1827,  0.1539,
+          0.2159, -0.0371, -0.1175, -0.1020,  0.0967, -0.0327, -0.2982, -0.1110,
+         -0.0859, -0.1582,  0.1494,  0.0148, -0.0366, -0.0241,  0.0151,  0.1710,
+         -0.0170,  0.0315, -0.1093, -0.1547, -0.0145, -0.0874, -0.1521,  0.0393]],
+       grad_fn=<CatBackward0>)
+Graph Similarity Matrix: tensor([[1.0000, 0.9527],
+        [0.9527, 1.0000]], grad_fn=<AddBackward0>)
+
+Graph Pairwise Similarities:
+Similarity between Graph 0 and Graph 1: 95.2691%
