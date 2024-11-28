@@ -4,20 +4,49 @@ from torch_geometric.nn import global_mean_pool, global_max_pool, global_add_poo
 import torch.nn as nn
 # RGCN Model
 class RGCN(torch.nn.Module):
-    def __init__(self, in_channels, hidden_channels, out_channels, num_relations):
+    def __init__(self, in_channels, hidden_channels, out_channels, num_relations, num_layers=3, dropout=0.2):
         super(RGCN, self).__init__()
+        self.num_layers = num_layers
+        self.dropout = nn.Dropout(p=dropout)
+
+        # 第一层卷积
         self.conv1 = RGCNConv(in_channels, hidden_channels, num_relations, num_bases=8)
-        self.conv2 = RGCNConv(hidden_channels, hidden_channels, num_relations, num_bases=8)
-        self.conv3 = RGCNConv(hidden_channels, out_channels, num_relations, num_bases=8)
-        self.dropout = nn.Dropout(p=0.2)
+
+        # 中间层卷积（如果有多层）
+        self.hidden_convs = nn.ModuleList([
+            RGCNConv(hidden_channels, hidden_channels, num_relations, num_bases=8)
+            for _ in range(num_layers - 2)
+        ])
+
+        # 最后一层卷积
+        self.conv_out = RGCNConv(hidden_channels, out_channels, num_relations, num_bases=8)
+
+        # 残差连接
+        self.residual = (in_channels == hidden_channels)
+
+        # 批量归一化
+        self.bn = nn.ModuleList([nn.BatchNorm1d(hidden_channels) for _ in range(num_layers - 1)])
+
     def forward(self, x, edge_index, edge_type):
+        # 第一层卷积
+        x_initial = x  # 用于残差连接
         x = self.conv1(x, edge_index, edge_type)
         x = torch.relu(x)
+        x = self.bn[0](x)  # 批量归一化
         x = self.dropout(x)
-        x = self.conv2(x, edge_index, edge_type)
-        x = torch.relu(x)
-        x = self.dropout(x)
-        x = self.conv3(x, edge_index, edge_type)
+
+        # 中间层卷积
+        for i, conv in enumerate(self.hidden_convs):
+            x_residual = x if self.residual else 0
+            x = conv(x, edge_index, edge_type)
+            x = torch.relu(x)
+            x = self.bn[i + 1](x)
+            x = self.dropout(x)
+            x = x + x_residual  # 残差连接
+
+        # 最后一层卷积
+        x = self.conv_out(x, edge_index, edge_type)
+
         return x
 
 # Attention-based Pooling

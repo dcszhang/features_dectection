@@ -10,7 +10,7 @@ import networkx as nx
 import torch
 from torch_geometric.data import Data
 from torch_geometric.loader import DataLoader  # 确保使用新版 DataLoader
-
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from .rgcn import RGCN  # 导入 RGCN 模型
 from .rgcn import AttentionPooling
 import torch.nn.functional as F
@@ -62,51 +62,42 @@ def process_second_feature(ssa):
     #         for insn in instructions:
     #             print(f"    {insn}")
     # 检查训练数据
+    # 过滤掉短指令序列
 
     # 初始化并训练 Word2Vec 模型
     model = Word2Vec(
         sentences=training_data,
-        vector_size=16,    # 嵌入向量维度
+        vector_size=200,    # 嵌入向量维度
         window=2,# 上下文窗口大小
         min_count=1,       # 最小频率
         sg=1,              # Skip-Gram 方法
         compute_loss=True, # 启用损失计算
         alpha=0.03,  # 初始学习率
-        min_alpha=0.0007,  # 最小学习率
-        negative=100,  # 增加负采样数量
-        epochs=200          # 总迭代次数
+        min_alpha=0.0007,  # 最小学习率 
+        negative=150,  # 增加负采样数量
+        epochs=300,          # 总迭代次数
     )
+  
     tsne_visualization(model)
 
     # 保存模型
-    model.save("cfg_word2vec.model")
+    model.save("cfg.model")
     # # 生成 SDG
     ssa_functions = sorted(ssa.functions, key=lambda f: f.offset)
-    function_embeddings, adjacency_matrices = generate_sdg(ssa_functions, "cfg_word2vec.model")
+    function_embeddings, adjacency_matrices = generate_sdg(ssa_functions, "cfg.model")
 
     # 打印函数嵌入和邻接矩阵
     print("--- Printing Function Embeddings and Adjacency Matrices ---")
     for function_key, embeddings in function_embeddings.items():
         print(f"Function: {function_key}")
-        
-        # 嵌入信息统计
-        all_embeddings = np.array(list(embeddings.values()))
-        print(f"  Total Nodes: {len(embeddings)}")
-        print(f"  Embedding Mean: {all_embeddings.mean(axis=0)[:5]}...")
-        print(f"  Embedding Std Dev: {all_embeddings.std(axis=0)[:5]}...")
-        
-        # 邻接矩阵
+        print("Node Embeddings:")
+        for block_offset, embedding in embeddings.items():
+            print(f"  Block {hex(block_offset)}: {embedding[:5]}...")  # 仅打印嵌入的前5个维度
+        print("Adjacency Matrix:")
         edge_index, edge_type = adjacency_matrices[function_key]
-        print(f"  Total Edges: {len(edge_type)}")
-        print("  Edge Types Distribution:", {t: edge_type.count(t) for t in set(edge_type)})
-        
-        # 打印前 5 条边
-        print("  Sample Edges:")
-        for i in range(min(5, len(edge_type))):
-            print(f"    Edge: {edge_index[0][i]} -> {edge_index[1][i]}, Type: {edge_type[i]}")
+        print(f"  Edge Index (2, E):\n{edge_index}")
+        print(f"  Edge Types (E):\n{edge_type}")
         print("-" * 50)
-
-
 
     # # 准备 RGCN 数据
     rgcn_data_list = prepare_rgcn_data(function_embeddings, adjacency_matrices)
@@ -119,159 +110,163 @@ def process_second_feature(ssa):
             print("-" * 50)
     # 创建 DataLoader
     loader = DataLoader(rgcn_data_list, batch_size=len(rgcn_data_list), shuffle=True)
-    # for data in loader:
-    #     print("--- DataLoader Output ---")
-    #     print(f"Batch Tensor (data.batch): {data.batch}")
-    #     print(f"Node Features Shape (data.x): {data.x.shape}")
-    #     print(f"Edge Index Shape (data.edge_index): {data.edge_index.shape}")
-    #     print(f"Edge Types Shape (data.edge_type): {data.edge_type.shape}")
-    #     assert data.edge_index.max().item() < data.x.shape[0], "Edge index out of node range!"
+    for data in loader:
+        print("--- DataLoader Output ---")
+        print(f"Batch Tensor (data.batch): {data.batch}")
+        print(f"Node Features Shape (data.x): {data.x.shape}")
+        print(f"Edge Index Shape (data.edge_index): {data.edge_index.shape}")
+        print(f"Edge Types Shape (data.edge_type): {data.edge_type.shape}")
+        assert data.edge_index.max().item() < data.x.shape[0], "Edge index out of node range!"
 
-    #     break  # 检查第一个批次
-
-
-    in_channels = 16
+    in_channels = 200
     hidden_channels = 64
-    out_channels = 16
+    out_channels = 200
     num_relations = 2
-    num_epochs = 100
+    num_epochs = 500
     model = RGCN(in_channels, hidden_channels, out_channels, num_relations)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.1, weight_decay=5e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
     # 调用训练函数
-    all_node_embeddings, graph_embeddings, topology_features = train_and_get_node_and_graph_embeddings(
+    all_node_embeddings = train_and_get_node_and_graph_embeddings(
         loader, model, optimizer, num_epochs, out_channels=out_channels
     )
+    # # 遍历每个图，输出节点嵌入
+    # print("--- Printing Function Node Embeddings ---")
+    # for i, data in enumerate(loader):
+    #     data = validate_and_fix_data(data)  # 修复数据一致性
+    #     for graph_idx in data.batch.unique():
+    #         # 获取属于该图的节点
+    #         graph_nodes = (data.batch == graph_idx).nonzero(as_tuple=True)[0]
+    #         graph_node_embeddings = all_node_embeddings[graph_nodes]
 
-    # # Check graph embeddings
+    #         print(f"Function Graph {i}-{graph_idx.item()}:")
+    #         print("Node Embeddings:")
+    #         for node_idx, embedding in enumerate(graph_node_embeddings):
+    #             print(f"  Node {node_idx}: {embedding[:5].tolist()}...")  # 仅打印前5个维度
+    #         print("Adjacency Matrix:")
+    #         filtered_edges_mask = torch.tensor([
+    #             src in graph_nodes.tolist() and dst in graph_nodes.tolist()
+    #             for src, dst in data.edge_index.T.tolist()
+    #         ])
+    #         filtered_edges = data.edge_index[:, filtered_edges_mask]
+    #         filtered_edge_types = data.edge_type[filtered_edges_mask]
+    #         print(f"  Edge Index (2, E):\n{filtered_edges}")
+    #         print(f"  Edge Types (E):\n{filtered_edge_types}")
+    #         print("-" * 50)
+    graph_embeddings = []  # 存储图嵌入
+
+    # 遍历批次，计算图嵌入
+    for data in loader:
+        for graph_idx in data.batch.unique():
+            # 提取属于当前图的节点
+            graph_nodes = (data.batch == graph_idx).nonzero(as_tuple=True)[0]
+            graph_node_embeddings = all_node_embeddings[graph_nodes]
+
+            # 生成图嵌入：平均池化
+            graph_embedding = torch.mean(graph_node_embeddings, dim=0)
+            graph_embeddings.append(graph_embedding.unsqueeze(0))  # 保持维度一致
+
+    # 汇总所有图的嵌入
+    graph_embeddings = torch.cat(graph_embeddings, dim=0)  # 形状 [num_graphs, embedding_dim]
+
+    # 打印图嵌入信息
     print("Graph Embeddings Shape:", graph_embeddings.shape)
     print("Graph Embeddings:", graph_embeddings)
 
-    similarity_matrix = compute_graph_similarity(graph_embeddings, topology_features)
+    # 计算图相似性矩阵
+    similarity_matrix = compute_graph_similarity(graph_embeddings)
     print("Graph Similarity Matrix:", similarity_matrix)
 
-    # Print pairwise similarities
+    # 打印图间相似度
     num_graphs = similarity_matrix.size(0)
     print("\nGraph Pairwise Similarities:")
     for i in range(num_graphs):
         for j in range(i + 1, num_graphs):
             print(f"Similarity between Graph {i} and Graph {j}: {similarity_matrix[i, j].item() * 100:.4f}%")
 
+def compute_graph_similarity(graph_embeddings):
+    """
+    基于图嵌入计算图相似性矩阵，并调整为非负值。
+    """
+    # 归一化图嵌入以计算余弦相似性
+    normalized_embeddings = F.normalize(graph_embeddings, p=2, dim=1)  # L2 归一化
+    similarity_matrix = torch.mm(normalized_embeddings, normalized_embeddings.T)  # 余弦相似度
+
+    # 调整相似度范围到 [0, 1]
+    similarity_matrix = (similarity_matrix + 1) / 2
+    return similarity_matrix
 
 def train_and_get_node_and_graph_embeddings(loader, model, optimizer, num_epochs, out_channels):
     """
-    训练模型并获取节点和图嵌入。
+    训练 RGCN 模型并获取节点和图嵌入。
     """
     model.train()
-    attention_pool = AttentionPooling(in_features=out_channels, num_heads=4)
-
-    all_graph_topology_features = []
-
     for epoch in range(num_epochs):
         total_loss = 0
-        all_node_embeddings = []
-        graph_embeddings = []
-        graph_topology_features = []  # 每轮需要清空
+
         for data in loader:
             optimizer.zero_grad()
-            # 前向传播
-            out = model(data.x, data.edge_index, data.edge_type)
 
-            loss = torch.nn.functional.mse_loss(out, torch.zeros_like(out))
+            # 数据增强：添加随机噪声和随机边
+            # data.x += torch.randn_like(data.x) * 0.005  # 加入小的随机噪声
+            # num_edges_to_add = data.edge_index.size(1) // 10
+            # new_edges = torch.randint(0, data.x.size(0), (2, num_edges_to_add))
+            # new_edge_types = torch.zeros(num_edges_to_add, dtype=torch.long)  # 新边类型为 0
+            # data.edge_index = torch.cat([data.edge_index, new_edges], dim=1)
+            # data.edge_type = torch.cat([data.edge_type, new_edge_types], dim=0)
+
+            # 模型前向传播
+            node_embeddings = model(data.x, data.edge_index, data.edge_type)
+
+            # 对比学习损失
+            loss_contrastive = contrastive_loss(node_embeddings, data.batch, margin=1.0)
+
+            # 边类型约束损失
+            loss_edge = compute_edge_loss(node_embeddings, data.edge_index, data.edge_type)
+
+            # 总损失
+            loss = loss_contrastive + 0.1 * loss_edge
             loss.backward()
             optimizer.step()
+
             total_loss += loss.item()
-            print("Full Batch Tensor (data.batch):", data.batch)
-            for graph_idx in data.batch.unique():
-                graph_nodes = (data.batch == graph_idx).nonzero(as_tuple=True)[0]
-                print(f"Graph {graph_idx}: Node Count = {graph_nodes.shape[0]}")
-                print(f"Graph {graph_idx}: Node Indices = {graph_nodes.tolist()}")
-        
-                graph_node_embeddings = out[graph_nodes]
-                all_node_embeddings.append(graph_node_embeddings)
 
-                graph_nodes_set = set(graph_nodes.tolist())
-                filtered_edges_mask = torch.tensor([
-                    src in graph_nodes_set and dst in graph_nodes_set
-                    for src, dst in data.edge_index.T.tolist()
-                ])
-                filtered_edges = data.edge_index[:, filtered_edges_mask]
-                print(f"Graph {graph_idx}: Edge Count = {filtered_edges.shape[1]}")
-                print(f"Graph {graph_idx}: Edges = {filtered_edges.tolist()}")
+        # 打印训练信息
+        if epoch % 100 == 0:
+            print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {total_loss / len(loader):.4f}")
 
-                # 计算拓扑特征
-                num_nodes = graph_node_embeddings.size(0)
-                num_edges = filtered_edges.size(1)
-                avg_degree = num_edges / num_nodes if num_nodes > 0 else 0
-                density = num_edges / (num_nodes * (num_nodes - 1)) if num_nodes > 1 else 0
-                graph_features = torch.tensor([num_nodes, num_edges, avg_degree, density], dtype=torch.float)
-
-                # 保存拓扑特征
-                graph_topology_features.append(graph_features)
-
-                # 使用注意力池化计算图嵌入
-                graph_embedding = attention_pool(graph_node_embeddings, graph_features)
-                graph_embeddings.append(graph_embedding.unsqueeze(0))
+    return node_embeddings
 
 
-        # 汇总所有图嵌入
-        graph_embeddings = torch.cat(graph_embeddings, dim=0)
-        all_graph_topology_features = graph_topology_features  # 不追加，只保留最新值
-        if(epoch % 10 == 0):
-                print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {total_loss / len(loader):.4f}")
-    return all_node_embeddings, graph_embeddings, torch.stack(all_graph_topology_features, dim=0)
 
-
-def compute_topology_features(edge_index, num_nodes):
+def contrastive_loss(embeddings, labels, margin=1.0):
     """
-    Compute simple topology features for a graph.
+    对比学习损失：
+    - 同图的节点嵌入应该更接近。
+    - 不同图的节点嵌入应该远离。
     """
-    degrees = torch.bincount(edge_index[0], minlength=num_nodes)
-    degree_mean = degrees.float().mean()
-    degree_max = degrees.float().max()
-    return torch.tensor([degree_mean, degree_max], dtype=torch.float)
+    distances = torch.cdist(embeddings, embeddings, p=2)  # 计算节点之间的欧几里得距离
+    positive_pairs = (labels[:, None] == labels[None, :]).float()  # 同图的节点对
+    negative_pairs = 1 - positive_pairs
 
-def aggregate_node_embeddings(node_embeddings , batch_data_list):
+    positive_loss = positive_pairs * torch.square(distances)  # 同图距离应该小
+    negative_loss = negative_pairs * torch.clamp(margin - distances, min=0)  # 跨图距离应该大
+
+    return positive_loss.mean() + negative_loss.mean()
+
+
+def compute_edge_loss(node_embeddings, edge_index, edge_type):
     """
-    聚合节点嵌入为图嵌入。
+    边类型约束损失：
+    - 控制流或数据流相邻节点应该更相似。
     """
-    graph_embeddings = []
-    for idx, graph_embedding in enumerate(node_embeddings):
-        # 聚合每个图的节点嵌入为单个图嵌入
-        aggregated_embedding = graph_embedding.mean(dim=0)  # 使用均值聚合
-        graph_embeddings.append(aggregated_embedding)
-        print(f"Graph {idx} Aggregated Embedding: {aggregated_embedding}")  # 打印每个图的嵌入
-    # 返回形状为 (num_graphs, embedding_dim) 的张量
-    return torch.stack(graph_embeddings, dim=0)
-
-
-from torch.nn.functional import cosine_similarity
-
-import torch.nn.functional as F
-
-def compute_graph_similarity(graph_embeddings, topology_features, alpha=0.5):
-    """
-    计算图相似性，结合嵌入和拓扑特征。
-    :param graph_embeddings: 图嵌入 (N, embedding_dim)
-    :param topology_features: 图拓扑特征 (N, num_features)
-    :param alpha: 嵌入与拓扑特征的权重系数，范围 [0, 1]
-    :return: final_similarity: 图相似性矩阵 (N, N)
-    """
-    # 确保输入维度正确
-    assert graph_embeddings.size(0) == topology_features.size(0), "图嵌入和拓扑特征的图数量不匹配"
-    
-    # 步骤 1: 嵌入相似性
-    normalized_embeddings = F.normalize(graph_embeddings, p=2, dim=1)  # 对图嵌入归一化
-    embedding_similarity = torch.mm(normalized_embeddings, normalized_embeddings.T)  # 余弦相似度 (N, N)
-    
-    # 步骤 2: 拓扑特征相似性
-    normalized_topology = F.normalize(topology_features, p=2, dim=1)  # 对拓扑特征归一化
-    topology_similarity = torch.mm(normalized_topology, normalized_topology.T)  # 余弦相似度 (N, N)
-    
-    # 步骤 3: 结合嵌入相似性和拓扑特征相似性
-    final_similarity = alpha * embedding_similarity + (1 - alpha) * topology_similarity
-
-    return final_similarity
-
+    src, dst = edge_index
+    edge_distances = torch.norm(node_embeddings[src] - node_embeddings[dst], dim=1)
+    edge_weights = torch.ones_like(edge_type, dtype=torch.float)  # 默认权重为 1
+    edge_weights[edge_type == 0] = 1.0  # 控制依赖边权重更高
+    edge_weights[edge_type == 1] = 0.5  # 数据依赖边权重较低
+    weighted_distances = edge_weights * edge_distances
+    edge_loss = torch.mean(weighted_distances)  # 相邻节点的距离应该小
+    return edge_loss
 
 
 def generate_sdg(ssa_functions, model_path):
@@ -304,7 +299,7 @@ def generate_sdg(ssa_functions, model_path):
     adjacency_matrices = {}
     edge_types = {}
     # # 加载 Word2Vec 模型
-    model = Word2Vec.load("./cfg_word2vec.model")
+    model = Word2Vec.load(model_path)
     for section in dot_sections:
         if section.strip():  # 确保不是空字符串
             func_name_end = section.find(' {')
@@ -390,22 +385,6 @@ def prepare_rgcn_data(function_embeddings, adjacency_matrices):
         data_list.append(data)
     return data_list
 
-def contrastive_loss(embeddings, margin=1.0):
-    similarity_matrix = torch.mm(embeddings, embeddings.t())
-    num_graphs = embeddings.size(0)
-    loss = 0.0
-
-    for i in range(num_graphs):
-        for j in range(num_graphs):
-            if i != j:
-                target = 1.0 if i == j else 0.0
-                distance = 1.0 - similarity_matrix[i, j]
-                if target == 1.0:
-                    loss += distance**2
-                else:
-                    loss += torch.clamp(margin - distance, min=0)**2
-    return loss / (num_graphs * (num_graphs - 1))
-
 def generate_weighted_adjacency_matrix_with_types(node_embeddings, control_edges, data_edges):
     """
     根据控制依赖边和数据依赖边生成带类型的边表示。
@@ -444,7 +423,6 @@ def generate_weighted_adjacency_matrix_with_types(node_embeddings, control_edges
     edge_index = np.array(edge_index).T  # shape: (2, E)
 
     return edge_index, edge_type
-
 
 
 def compute_block_embedding(block, model):
