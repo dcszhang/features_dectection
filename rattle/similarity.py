@@ -15,6 +15,7 @@ from .rgcn import RGCN  # 导入 RGCN 模型
 from .rgcn import AttentionPooling
 import torch.nn.functional as F
 from .tsne import tsne_visualization
+import pickle
 def process_second_feature(ssa):
     # 处理第二个特征 
     instruction_sequences = {}  # 存储所有函数的指令序列
@@ -22,12 +23,7 @@ def process_second_feature(ssa):
         cfg = rattle.ControlFlowGraph(function)
         # 获取 DOT 表示
         dot_content = cfg.dot()
-        
-        # 解析 DOT 提取基本块指令序列
-        function_sequences = parse_cfg_dot(dot_content)
-        
-        # 存储结果
-        instruction_sequences[function] = function_sequences
+
         pdg = rattle.ProgramDependenceGraph(function)
         # 写入 PDG 的 dot 文件
         with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
@@ -44,11 +40,7 @@ def process_second_feature(ssa):
         out_file_pdf = f'output/pdg_{function.offset:#x}.pdf'
         subprocess.call(['dot', '-Tpdf', '-o', out_file_pdf, dot_path])
         print(f'[+] Wrote PDG to {out_file_pdf}') #meiyige PDGshengcheng wanb 
-    # 整合所有指令序列
-    training_data = []
-    for sequences in instruction_sequences.values():
-        for instructions in sequences.values():
-            training_data.append(instructions)
+
     # 输出提取的指令序列
     # 打印整合后的所有指令序列
     # print("Number of instruction sequences:", len(training_data))
@@ -61,30 +53,9 @@ def process_second_feature(ssa):
     #         print(f"  Basic Block {hex(block_offset)}:")
     #         for insn in instructions:
     #             print(f"    {insn}")
-    # 检查训练数据
-    # 过滤掉短指令序列
-
-    # 初始化并训练 Word2Vec 模型
-    model = Word2Vec(
-        sentences=training_data,
-        vector_size=200,    # 嵌入向量维度
-        window=2,# 上下文窗口大小
-        min_count=1,       # 最小频率
-        sg=1,              # Skip-Gram 方法
-        compute_loss=True, # 启用损失计算
-        alpha=0.03,  # 初始学习率
-        min_alpha=0.0007,  # 最小学习率 
-        negative=150,  # 增加负采样数量
-        epochs=300,          # 总迭代次数
-    )
-  
-    tsne_visualization(model)
-
-    # 保存模型
-    model.save("cfg.model")
     # # 生成 SDG
     ssa_functions = sorted(ssa.functions, key=lambda f: f.offset)
-    function_embeddings, adjacency_matrices = generate_sdg(ssa_functions, "cfg.model")
+    function_embeddings, adjacency_matrices = generate_sdg(ssa_functions, "word2vec.model")
 
     # 打印函数嵌入和邻接矩阵
     print("--- Printing Function Embeddings and Adjacency Matrices ---")
@@ -122,17 +93,16 @@ def process_second_feature(ssa):
     hidden_channels = 64
     out_channels = 200
     num_relations = 2
-    num_epochs = 500
+    num_epochs = 1000
     model = RGCN(in_channels, hidden_channels, out_channels, num_relations)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
     # 调用训练函数
     all_node_embeddings = train_and_get_node_and_graph_embeddings(
         loader, model, optimizer, num_epochs, out_channels=out_channels
     )
-    # # 遍历每个图，输出节点嵌入
+    # 遍历每个图，输出节点嵌入
     # print("--- Printing Function Node Embeddings ---")
     # for i, data in enumerate(loader):
-    #     data = validate_and_fix_data(data)  # 修复数据一致性
     #     for graph_idx in data.batch.unique():
     #         # 获取属于该图的节点
     #         graph_nodes = (data.batch == graph_idx).nonzero(as_tuple=True)[0]
@@ -217,21 +187,18 @@ def train_and_get_node_and_graph_embeddings(loader, model, optimizer, num_epochs
             # 模型前向传播
             node_embeddings = model(data.x, data.edge_index, data.edge_type)
 
-            # 对比学习损失
-            loss_contrastive = contrastive_loss(node_embeddings, data.batch, margin=1.0)
-
             # 边类型约束损失
             loss_edge = compute_edge_loss(node_embeddings, data.edge_index, data.edge_type)
 
             # 总损失
-            loss = loss_contrastive + 0.1 * loss_edge
+            loss = loss_edge
             loss.backward()
             optimizer.step()
 
             total_loss += loss.item()
 
         # 打印训练信息
-        if epoch % 100 == 0:
+        if epoch % 250 == 0:
             print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {total_loss / len(loader):.4f}")
 
     return node_embeddings
