@@ -229,8 +229,8 @@ def compute_edge_loss(node_embeddings, edge_index, edge_type):
     src, dst = edge_index
     edge_distances = torch.norm(node_embeddings[src] - node_embeddings[dst], dim=1)
     edge_weights = torch.ones_like(edge_type, dtype=torch.float)  # 默认权重为 1
-    edge_weights[edge_type == 0] = 1.0  # 控制依赖边权重更高
-    edge_weights[edge_type == 1] = 0.5  # 数据依赖边权重较低
+    edge_weights[edge_type == 0] = 1.5  # 控制依赖边权重更高
+    edge_weights[edge_type == 1] = 1  # 数据依赖边权重较低
     weighted_distances = edge_weights * edge_distances
     edge_loss = torch.mean(weighted_distances)  # 相邻节点的距离应该小
     return edge_loss

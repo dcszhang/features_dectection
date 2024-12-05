@@ -6,9 +6,8 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/rattle-cli.py",
-            "args": ["--input", "bytecode.txt"],
+            "args": ["--input", "bytecode"],
             "console": "internalConsole",
-            "justMyCode": false,
             "env": {
                 "PYTHONBREAKPOINT": "pdb.set_trace"
             }
