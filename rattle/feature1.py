@@ -1,6 +1,91 @@
+# first_feature.py
+import rattle
+# 定义地址变量来保存所有路径
+all_trace_paths = {}
+# 定义全局变量，用于存储所有变量的追踪路径
+all_traces = {}  # 将列表改为字典
+# 定义全局变量来保存每个地址变量的树
+all_trees = {}
+
+def save_trace_to_global(variable, trace):
+    """保存回溯路径到全局变量"""
+    global all_trace_paths
+    all_trace_paths[variable] = trace
+
+
+def analyze_contract_complex(ssa):
+    """
+    分析合约中是否可以发送 Ether，并追踪相关指令路径。
+    
+    :param ssa: 静态单赋值形式的分析对象
+    :param backward_analysis: 回溯分析函数
+    :param build_tree_structure: 构建树形结构的函数
+    """
+    # 存储所有指令
+    all_instructions_by_variable = {}
+    # print("Identified Functions:")
+    # for function in sorted(ssa.functions, key=lambda f: f.offset):
+    #     print(f'\tFunction: {function.desc()} starts at offset {function.offset}, argument offsets: {function.arguments()}')
+
+    # print("")
+
+    # 遍历所有函数并保存指令
+    for function in ssa.functions:
+        for block in function:
+            for insn in block:
+                if hasattr(insn, 'return_value') and insn.return_value is not None:
+                    variable = insn.return_value  # 获取指令的返回值变量
+                    all_instructions_by_variable[variable] = insn  # 将变量和对应的指令保存到字典中
+
+    can_send, functions_that_can_send = ssa.can_send_ether()
+    func_index = 0
+    all_traces = {}  # 初始化追踪字典
+
+    if can_send:
+        # print("[+] Contract can send ether from following functions:")
+        for function in functions_that_can_send:
+            # 初始化每个函数的追踪列表
+            all_traces[func_index] = []
+            # print(f"\t- {function.desc()}")
+            _, insns = function.can_send_ether()
+            for insn in insns:
+                # print(f"\t\t{insn}")
+                if insn.insn.name == 'SELFDESTRUCT':
+                    address = insn.arguments[0]
+                    # print(f'\t\t\t{address.writer}')
+                elif insn.insn.name == 'CALL':
+                    gas = insn.arguments[0]
+                    address = insn.arguments[1]
+                    value = insn.arguments[2]
+                    argOst = insn.arguments[3]
+                    argLen = insn.arguments[4]
+                    retOst = insn.arguments[5]
+                    retLen = insn.arguments[6]
+                    # 回溯分析，记录沿途的指令路径
+                    writer_insn = address.writer
+                    address_source = insn.arguments[1]
+                    trace = backward_analysis(address_source, all_instructions_by_variable)
+                    tree_root = build_tree_structure(address_source, all_instructions_by_variable)
+                    # print(f'\t\t\tTo:\t{writer_insn}')
+                    # print(f'\t\t\tTrace:')
+                    # for t in trace:
+                    #     print(f'\t\t\t\t{t}')
+                    # analyze_saved_traces(address_source,all_instructions_by_variable) # 分析保存的路径 
+                #     try:
+                #         if value.writer:
+                #             print(f'\t\t\tValue:\t{value.writer}')
+                #         else:
+                #             value_in_eth = int(value) * 1.0 / 10 ** 18
+                #             print(f'\t\t\tValue:\t{value} {value_in_eth}ETH')
+                #     except Exception as e:
+                #         print(e)
+                # print("")
+    # else:
+    #     print("[+] Contract can not send ether.")
 
 
 
+# 解决第一个特征相关的函数
 def backward_analysis(variable, all_instructions_by_variable, visited=None):
     """
     通过变量名直接查找定义，依据操作数进行递归回溯。

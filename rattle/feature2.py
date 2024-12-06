@@ -2,7 +2,6 @@ import numpy as np
 from gensim.models import Word2Vec
 import pydot
 import rattle
-from typing import Sequence
 import tempfile
 import os
 import subprocess
@@ -10,12 +9,10 @@ import networkx as nx
 import torch
 from torch_geometric.data import Data
 from torch_geometric.loader import DataLoader  # 确保使用新版 DataLoader
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from .rgcn import RGCN  # 导入 RGCN 模型
 from .rgcn import AttentionPooling
 import torch.nn.functional as F
 from .tsne import tsne_visualization
-import pickle
 def process_second_feature(ssa):
     # 处理第二个特征 
     instruction_sequences = {}  # 存储所有函数的指令序列
@@ -23,7 +20,12 @@ def process_second_feature(ssa):
         cfg = rattle.ControlFlowGraph(function)
         # 获取 DOT 表示
         dot_content = cfg.dot()
-
+ 
+        # 解析 DOT 提取基本块指令序列
+        function_sequences = parse_cfg_dot(dot_content)
+        
+        # 存储结果
+        instruction_sequences[function] = function_sequences
         pdg = rattle.ProgramDependenceGraph(function)
         # 写入 PDG 的 dot 文件
         with tempfile.NamedTemporaryFile(suffix='.dot', mode='w', delete=False) as t:
@@ -53,22 +55,22 @@ def process_second_feature(ssa):
     #         print(f"  Basic Block {hex(block_offset)}:")
     #         for insn in instructions:
     #             print(f"    {insn}")
-    # # 生成 SDG
+    # 生成 SDG
     ssa_functions = sorted(ssa.functions, key=lambda f: f.offset)
     function_embeddings, adjacency_matrices = generate_sdg(ssa_functions, "word2vec.model")
 
     # 打印函数嵌入和邻接矩阵
-    print("--- Printing Function Embeddings and Adjacency Matrices ---")
-    for function_key, embeddings in function_embeddings.items():
-        print(f"Function: {function_key}")
-        print("Node Embeddings:")
-        for block_offset, embedding in embeddings.items():
-            print(f"  Block {hex(block_offset)}: {embedding[:5]}...")  # 仅打印嵌入的前5个维度
-        print("Adjacency Matrix:")
-        edge_index, edge_type = adjacency_matrices[function_key]
-        print(f"  Edge Index (2, E):\n{edge_index}")
-        print(f"  Edge Types (E):\n{edge_type}")
-        print("-" * 50)
+    # print("--- Printing Function Embeddings and Adjacency Matrices ---")
+    # for function_key, embeddings in function_embeddings.items():
+    #     print(f"Function: {function_key}")
+    #     print("Node Embeddings:")
+    #     for block_offset, embedding in embeddings.items():
+    #         print(f"  Block {hex(block_offset)}: {embedding[:5]}...")  # 仅打印嵌入的前5个维度
+    #     print("Adjacency Matrix:")
+    #     edge_index, edge_type = adjacency_matrices[function_key]
+    #     print(f"  Edge Index (2, E):\n{edge_index}")
+    #     print(f"  Edge Types (E):\n{edge_type}")
+    #     print("-" * 50)
 
     # # 准备 RGCN 数据
     rgcn_data_list = prepare_rgcn_data(function_embeddings, adjacency_matrices)
@@ -81,17 +83,17 @@ def process_second_feature(ssa):
             print("-" * 50)
     # 创建 DataLoader
     loader = DataLoader(rgcn_data_list, batch_size=len(rgcn_data_list), shuffle=True)
-    for data in loader:
-        print("--- DataLoader Output ---")
-        print(f"Batch Tensor (data.batch): {data.batch}")
-        print(f"Node Features Shape (data.x): {data.x.shape}")
-        print(f"Edge Index Shape (data.edge_index): {data.edge_index.shape}")
-        print(f"Edge Types Shape (data.edge_type): {data.edge_type.shape}")
-        assert data.edge_index.max().item() < data.x.shape[0], "Edge index out of node range!"
+    # for data in loader:
+    #     print("--- DataLoader Output ---")
+    #     print(f"Batch Tensor (data.batch): {data.batch}")
+    #     print(f"Node Features Shape (data.x): {data.x.shape}")
+    #     print(f"Edge Index Shape (data.edge_index): {data.edge_index.shape}")
+    #     print(f"Edge Types Shape (data.edge_type): {data.edge_type.shape}")
+    #     assert data.edge_index.max().item() < data.x.shape[0], "Edge index out of node range!"
 
-    in_channels = 200
+    in_channels = 128
     hidden_channels = 64
-    out_channels = 200
+    out_channels = 128
     num_relations = 2
     num_epochs = 1000
     model = RGCN(in_channels, hidden_channels, out_channels, num_relations)
@@ -229,7 +231,7 @@ def compute_edge_loss(node_embeddings, edge_index, edge_type):
     src, dst = edge_index
     edge_distances = torch.norm(node_embeddings[src] - node_embeddings[dst], dim=1)
     edge_weights = torch.ones_like(edge_type, dtype=torch.float)  # 默认权重为 1
-    edge_weights[edge_type == 0] = 1.5  # 控制依赖边权重更高
+    edge_weights[edge_type == 0] = 1  # 控制依赖边权重更高
     edge_weights[edge_type == 1] = 1  # 数据依赖边权重较低
     weighted_distances = edge_weights * edge_distances
     edge_loss = torch.mean(weighted_distances)  # 相邻节点的距离应该小

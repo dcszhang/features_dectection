@@ -15,13 +15,7 @@ if __name__ == '__main__':
     }
     
     # 模拟解析参数后的行为
-    print("Arguments parsed:")
-    for key, value in args.items():
-        print(f"{key}: {value}")
-
-    # 在这里实现程序的主要逻辑
-    if args["input"] == "bytecode":
-        print("Processing bytecode...")
-    else:
-        print("Invalid input!")
+    # print("Arguments parsed:")
+    # for key, value in args.items():
+    #     print(f"{key}: {value}")
     main()

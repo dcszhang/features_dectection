@@ -51,7 +51,7 @@ def train_word2vec_model(training_data, vector_size=64, window=5, min_count=1, e
         min_count=min_count,      # 最小频率
         sg=1,                     # 使用 Skip-Gram 模型
         compute_loss=True,        # 启用损失计算
-        epochs=100,          # 总迭代次数
+        epochs=epochs,            # 迭代次数
         callbacks=[loss_logger]   # 添加损失记录回调
     )
     # 保存模型
@@ -64,8 +64,8 @@ training_data = load_training_data("dataset/training_data.pkl")
 # 训练并保存模型
 train_word2vec_model(
     training_data=training_data,
-    vector_size=200,      # 嵌入向量维度
-    window=2,             # 上下文窗口大小
+    vector_size=128,      # 嵌入向量维度
+    window=3,             # 上下文窗口大小
     min_count=1,          # 忽略频率小于 1 的词
     epochs=200,           # 迭代次数
     model_path="word2vec.model"  # 保存路径

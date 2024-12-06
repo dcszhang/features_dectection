@@ -200,3 +200,5 @@ pip-selfcheck.json
 # project specific
 output/
 # dataset/cleaned_bytecode.pkl
+*.pkl
+
