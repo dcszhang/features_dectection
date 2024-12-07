@@ -81,11 +81,11 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
     # 第一个特征分析
     analyze_contract_complex(ssa)
 
-    # 第二个特征分析
-    process_second_feature(ssa)
+    # # 第二个特征分析
+    # process_second_feature(ssa)
      
-    # 第三个特征分析
-    analyze_contract_external(ssa)
+    # # 第三个特征分析
+    # analyze_contract_external(ssa)
 
     # 第四个特征分析
     process_fourth_feature(ssa)

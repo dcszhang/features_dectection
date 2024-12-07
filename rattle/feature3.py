@@ -104,7 +104,7 @@ def analyze_saved_traces(all_trace_paths):
         # print(f"Analyzing trace for variable: {variable}")
         has_external_call = False
         for insn in trace:
-            if insn.insn.name in ['CALL', 'DELEGATECALL']:
+            if insn.insn.name in ['CALL']:
                 # print(f"Found external call at {insn}")
                 has_external_call = True
         results.append({
