@@ -35,22 +35,20 @@ def process_fourth_feature(ssa, threshold=0.1):
             # # 收集与 CALL 相关的指令
             call_related_instructions.update({insn for block in path for insn in block})
 
-        if(len(call_related_instructions) == 0):
-            continue
+        # if(len(call_related_instructions) == 0):
+        #     continue
         # 获取函数所有指令数目
         all_instructions = {insn for block in func for insn in block}
 
         # 获取去除 Transfer和外部调用相关指令后的剩余指令
         remaining_instructions = all_instructions - call_related_instructions
-        print("total_instructions: ", len(all_instructions))
-        print("remaining_instructions: ", len(remaining_instructions))
+        
         # 获取去除CALL和 SSTORE 相关指令后的剩余指令
         result_original = process_sstore_recursive_analysis(ssa, remaining_instructions)
         result = result_original[0]
-        func_name = result['function']
         remaining_instructions = result["remaining_instructions"]
-        print(f"\nFunction: {func_name}")
-        print(f"Remaining instructions after SSTORE analysis: {len(remaining_instructions)}")
+        print(f"\nFunction: {func.desc()}")
+        # print(f"Remaining instructions after SSTORE_&Transder_&CALL analysis: {len(remaining_instructions)}")
 
         # 计算比率
         total_related_instructions = len(all_instructions) - len(remaining_instructions)
@@ -60,8 +58,10 @@ def process_fourth_feature(ssa, threshold=0.1):
         is_scam_feature4 = ratio < threshold
 
         # 打印分析结果
-        print(f"\tTotal instructions: {function_total_instructions}")
-        print(f"\tUseless instructions: {len(remaining_instructions)}")
+        print(f"\tTotal instructions: {len(all_instructions)}")
+        print(f"\tcall_related_instructions: ", len(call_related_instructions))
+        print(f"\tSSTORE_related_instructions: ", len(all_instructions) - len(call_related_instructions) - len(remaining_instructions))
+        print(f"\tTotal Useless instructions: {len(remaining_instructions)}")
         print(f"\tRelated Ratio: {ratio:.2%}")
 
     if(is_scam_feature4):
@@ -79,8 +79,6 @@ def process_sstore_recursive_analysis(ssa, remaining_instructions):
     # 构建所有指令的字典
     all_instructions_by_variable = {}    
     for func in ssa.functions:
-        print(f"Analyzing function: {func.desc()}")
-
         # 遍历所有函数并保存指令
         for block in func:
             for insn in block:
@@ -88,12 +86,12 @@ def process_sstore_recursive_analysis(ssa, remaining_instructions):
                 for related_var in [insn.return_value] + (insn.arguments if hasattr(insn, 'arguments') else []):
                     if related_var is not None and related_var not in all_instructions_by_variable:
                         all_instructions_by_variable[related_var] = insn
-    print(f"Total variables with instructions: {len(all_instructions_by_variable)}")
+    # print(f"Total variables with instructions: {len(all_instructions_by_variable)}")
     # 对剩余指令执行 SSTORE 分析
     updated_remaining_instructions = iterative_sstore_analysis(
         remaining_instructions, all_instructions_by_variable
     )
-    print(f"Remaining instructions after SSTORE analysis ({len(updated_remaining_instructions)}):")
+    # print(f"Remaining instructions after SSTORE analysis ({len(updated_remaining_instructions)}):")
     # for insn in updated_remaining_instructions:
     #     print(f"\t{insn}")
 
@@ -118,7 +116,7 @@ def iterative_sstore_analysis(remaining_instructions, all_instructions_by_variab
             insn for insn in remaining_instructions
             if hasattr(insn, 'insn') and insn.insn.name == 'SSTORE'
         ]
-        print(f"Detected SSTORE instructions ({len(sstore_instructions)}):")
+        # print(f"Detected SSTORE instructions ({len(sstore_instructions)}):")
         if not sstore_instructions:
             # 如果没有 SSTORE 指令，退出循环
             break

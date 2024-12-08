@@ -15,10 +15,13 @@ from .feature2 import process_second_feature
 from .feature1 import analyze_contract_complex
 from .feature3 import analyze_contract_external
 from .feature4 import process_fourth_feature
+from .feature5 import process_fifth_feature
 import pydot
+import sys
+sys.setrecursionlimit(15000)  # 增加递归深度`限制
 import networkx as nx
 # This might not be true, but I have a habit of running the wrong python version and this is to save me frustration
-assert (sys.version_info.major >= 3 and sys.version_info.minor >= 6)
+# assert (sys.version_info.major >= 3 and sys.version_info.minor >= 6)
 from pprint import pprint
 logger = logging.getLogger(__name__)
 
@@ -67,31 +70,31 @@ def main(argv: Sequence[str] = tuple(sys.argv)) -> None:  # run me with python3,
         loglevel = None
 
     logging.basicConfig(stream=args.log, level=loglevel)
-    logger.info(f"Rattle running on input: {args.input.name}")
+    # logger.info(f"Rattle running on input: {args.input.name}")
 
     ssa = rattle.Recover(args.input.read(), edges=edges, optimize=args.optimize,
                          split_functions=args.no_split_functions)
 
-    print(ssa)
+    # print(ssa)
 
     print("--------------------------------------------------------------------------------------")
     print("------------------------Scam smart contract analysis process--------------------------")
     print("--------------------------------------------------------------------------------------")
     
-    # 第一个特征分析
-    analyze_contract_complex(ssa)
+    # # 第一个特征分析
+    # analyze_contract_complex(ssa)
 
-    # # 第二个特征分析
+    # 第二个特征分析
     # process_second_feature(ssa)
      
     # # 第三个特征分析
     # analyze_contract_external(ssa)
 
     # 第四个特征分析
-    process_fourth_feature(ssa)
+    # process_fourth_feature(ssa)
 
     # 第五个特征分析
-    # process_fifth_feature(ssa)
+    process_fifth_feature(ssa)
 
 
 

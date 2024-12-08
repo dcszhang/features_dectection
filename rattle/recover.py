@@ -7,7 +7,8 @@ import copy
 import cbor2
 
 from .ssa import *
-
+import sys
+sys.setrecursionlimit(5000)  # 增加递归深度限制
 logger = logging.getLogger(__name__)
 
 

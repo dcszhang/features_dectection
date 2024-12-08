@@ -8,7 +8,7 @@ if __name__ == '__main__':
     args = {
         "input": "bytecode",
         "optimize": False,
-        "no_split_functions": True,
+        "no_split_functions": False,
         "verbosity": "None",
         "supplemental_cfg_file": None,
         "stdout_to": None

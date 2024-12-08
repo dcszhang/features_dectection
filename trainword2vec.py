@@ -64,7 +64,7 @@ training_data = load_training_data("dataset/training_data.pkl")
 # 训练并保存模型
 train_word2vec_model(
     training_data=training_data,
-    vector_size=128,      # 嵌入向量维度
+    vector_size=64,      # 嵌入向量维度
     window=3,             # 上下文窗口大小
     min_count=1,          # 忽略频率小于 1 的词
     epochs=200,           # 迭代次数

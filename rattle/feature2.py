@@ -91,9 +91,9 @@ def process_second_feature(ssa):
     #     print(f"Edge Types Shape (data.edge_type): {data.edge_type.shape}")
     #     assert data.edge_index.max().item() < data.x.shape[0], "Edge index out of node range!"
 
-    in_channels = 128
+    in_channels = 64
     hidden_channels = 64
-    out_channels = 128
+    out_channels = 64
     num_relations = 2
     num_epochs = 1000
     model = RGCN(in_channels, hidden_channels, out_channels, num_relations)
@@ -269,6 +269,7 @@ def generate_sdg(ssa_functions, model_path):
     edge_types = {}
     # # 加载 Word2Vec 模型
     model = Word2Vec.load(model_path)
+    model.eval()
     for section in dot_sections:
         if section.strip():  # 确保不是空字符串
             func_name_end = section.find(' {')

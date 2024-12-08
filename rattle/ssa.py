@@ -7,7 +7,8 @@ from typing import List, Dict, Tuple, Optional, Set, cast, Iterator, Callable, I
 
 from rattle.evmasm import EVMAsm
 from .hashes import hashes
-
+import sys
+sys.setrecursionlimit(15000)  # 增加递归深度`限制
 logger = logging.getLogger(__name__)
 
 concrete_values: List['ConcreteStackValue'] = []
