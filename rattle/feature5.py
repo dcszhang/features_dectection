@@ -1,6 +1,7 @@
 import rattle
-
+import requests
 from web3 import Web3
+import json
 def process_fifth_feature(ssa):
     """
     检测 Feature 5：转账操作前后无关的日志输出。
@@ -41,39 +42,107 @@ def process_fifth_feature(ssa):
                         "call_instruction": f"Block {current_block.offset:#x}",
                         "log_found": log_found,
                     })
+    # # 配置
+    # API_KEY = "BWI4793MTZI4HFAWR767E6VD7QV51XTYWN"
+    # BASE_URL = "https://api.etherscan.io/api"
+
+    # def get_contract_logs(contract_address, from_block, to_block, topic=None):
+    #     params = {
+    #         "module": "logs",
+    #         "action": "getLogs",
+    #         "fromBlock": from_block,
+    #         "toBlock": to_block,
+    #         "address": contract_address,
+    #         "apikey": API_KEY
+    #     }
+    #     if topic:
+    #         params["topic0"] = topic  # 过滤指定事件
+    #     response = requests.get(BASE_URL, params=params)
+    #     return response.json()
+    
+
+    # contract_address = "0x610178da211fef7d417bc0e6fed39f05609ad788"  # 替换为你的合约地址
+    # from_block = "0"  # 起始区块号
+    # to_block = "latest"  # 查询到最新区块
+    # result = get_contract_logs(contract_address, from_block, to_block)
+    # if result["status"] == "1":
+    #     print("Logs found:")
+    #     for log in result["result"]:
+    #         print(json.dumps(log, indent=4))
+    # else:
+    #     print(f"Error: {result['message']}")
 
 
-    # 初始化 Web3
-    INFURA_URL = "https://mainnet.infura.io/v3/352b504766c349669daf3f058e02da5f"  # 替换为你的 Infura 项目 ID
-    web3 = Web3(Web3.HTTPProvider(INFURA_URL))
+    # 初始化 Web3 连接到本地节点
+    LOCAL_RPC_URL = "http://127.0.0.1:8545"  # 本地运行的以太坊节点
+    web3 = Web3(Web3.HTTPProvider(LOCAL_RPC_URL))
 
     # 检查 Web3 连接
     if not web3.is_connected():
-        print("Failed to connect to Ethereum network.")
+        print("Failed to connect to local Ethereum network.")
         exit()
     else:
-        print("Connected to Ethereum network.")
-    # 目标合约地址
-    contract_address = "0x5C6258EE96fD463D1fa6F206CDd79876af2735d9"
+        print("Connected to local Ethereum network.")
+
+    # 定义合约地址和 ABI
+    contract_address = "0x5fbdb2315678afecb367f032d93f642f64180aa3"  # 替换为本地部署的合约地址
+    contract_address = Web3.to_checksum_address(contract_address)
+
     contract_abi = [
+        {
+            "anonymous": False,
+            "inputs": [],
+            "name": "PlaceholderEvent",
+            "type": "event",
+        }
     ]
+
 
     # 获取合约实例
     contract = web3.eth.contract(address=contract_address, abi=contract_abi)
-    print("Contract loaded successfully.")
-    # 定义事件过滤器
-    from_block = 495  # 合约部署区块
-    to_block = 502 # 查询到最新区块
-    event_filter = contract.events.DummyLog.create_filter(
-        from_block=from_block,
-        to_block=to_block
-    )
-    # 获取事件日志
-    logs = event_filter.get_all_entries()
-    for log in logs:
-        print(f"Event found: Message={log['args']['message']}")
 
-    return results
+    # 查询事件日志
+    from_block = 0  # 起始区块
+    to_block = "latest"  # 查询到最新区块
+
+    try:
+        logs = web3.eth.get_logs({
+            "fromBlock": from_block,
+            "toBlock": to_block,
+            "address": contract_address,
+        })
+
+        print(f"Found {len(logs)} logs.")
+
+        for log in logs:
+            # 打印原始日志作为参考
+            log_dict = dict(log)
+            formatted_log = json.dumps(log_dict, indent=4, default=str)
+            print(f"Raw log:\n{formatted_log}")
+
+            # 提取并手动解码字符串
+            if log['data']:
+                data_bytes = Web3.to_bytes(hexstr=log['data'])
+
+                # 解码字符串偏移量（通常是 0x20）
+                offset = int.from_bytes(data_bytes[0:32], byteorder='big')
+                print(f"String offset: {offset}")
+
+                # 解码字符串长度
+                string_length = int.from_bytes(data_bytes[32:64], byteorder='big')
+                print(f"String length: {string_length}")
+
+                # 解码实际字符串内容
+                string_content = data_bytes[64:64 + string_length].decode('utf-8')
+                print(f"Extracted string: {string_content}")
+    except Exception as e:
+        print(f"Error while fetching logs: {e}")
+
+
+
+
+
+
 def find_predecessors_by_offset(function, current_offset, max_blocks=3):
     """
     根据偏移量查找最近的上 `max_blocks` 个基本块。

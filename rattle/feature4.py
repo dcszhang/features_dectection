@@ -35,8 +35,8 @@ def process_fourth_feature(ssa, threshold=0.1):
             # # 收集与 CALL 相关的指令
             call_related_instructions.update({insn for block in path for insn in block})
 
-        # if(len(call_related_instructions) == 0):
-        #     continue
+        if(len(call_related_instructions) == 0):
+            continue
         # 获取函数所有指令数目
         all_instructions = {insn for block in func for insn in block}
 
